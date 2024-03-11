@@ -1,0 +1,54 @@
+name: Mirroring
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+      - dev
+
+env:
+  MIRROR_URL:
+    git@github.com:EpitechPromo2027/B-OOP-400-REN-4-1-arcade-arthur.doriel.git
+  BINARIES:
+    arcade
+
+jobs:
+  check_compilation:
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Check compilation
+        run: |
+          make && make clean && make fclean && make re
+      - name: Check binary
+        run: |
+          if [ ! -f ${{ env.BINARIES }} ]; then
+            echo "Binary not found"
+            exit 1
+          fi
+
+  push_to_mirror:
+    if: github.event.pull_request.merged == true
+    needs: check_compilation
+    runs-on: ubuntu-latest
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      - name: Check branch
+        run: |
+          if [ "$(git rev-parse --abbrev-ref HEAD)" != "main" ]; then
+            echo "Not on main branch, skipping..."
+          else
+            echo "On main branch, continuing..."
+          fi
+      - uses: pixta-dev/repository-mirroring-action@v1
+        with:
+          target_repo_url:
+            ${{ env.MIRROR_URL }}
+          ssh_private_key:
+            ${{ secrets.GIT_SSH_PRIVATE_KEY }}
