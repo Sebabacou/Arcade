@@ -32,9 +32,52 @@ jobs:
             exit 1
           fi
 
+      - name: Upload binaries
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ env.BINARIES }}
+          path: ${{ env.BINARIES }}
+
+  crate_realease:
+    if : github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    needs : check_compilation
+    container: epitechcontent/epitest-docker:latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download binaries
+        uses: actions/download-artifact@v2
+        with:
+          name: ${{ env.BINARIES }}
+
+      - name: get previous tag
+        id: get_previous_tag
+        run: |
+          git fetch --tags
+          tag=$(git describe --tags `git rev-list --tags --max-count=1`)
+          major=$(echo $tag | cut -d. -f1 | cut -dv -f2)
+          new_major=$((major+1))
+          tag="v$new_major.0.0"
+          echo "::set-output name=tag::$tag"
+
+      - name: Release pushed tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          tag: ${{ steps.get_previous_tag.outputs.tag }}
+        run: |
+          gh release create "$tag" \
+              --repo="$GITHUB_REPOSITORY" \
+              --title="${GITHUB_REPOSITORY#*/} ${tag#v}" \
+              --generate-notes
+          
+          gh release upload "$tag" ./${{ env.BINARIES }}
+
+
+
   push_to_mirror:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
-    needs: check_compilation
+    needs: crate_realease
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker:latest
     steps:
