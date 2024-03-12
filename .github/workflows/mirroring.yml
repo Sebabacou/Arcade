@@ -77,7 +77,7 @@ jobs:
 
   push_to_mirror:
     if: github.event.pull_request.merged == true && github.event.pull_request.base.ref == 'main'
-    needs: crate_realease
+    needs: crate_release
     runs-on: ubuntu-latest
     container: epitechcontent/epitest-docker:latest
     steps:
