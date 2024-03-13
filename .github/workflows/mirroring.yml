@@ -51,20 +51,10 @@ jobs:
         with:
           name: ${{ env.BINARIES }}
 
-      - name: get previous tag
-        id: get_previous_tag
-        run: |
-          git fetch --tags
-          tag=$(git describe --tags `git rev-list --tags --max-count=1`)
-          major=$(echo $tag | cut -d. -f1 | cut -dv -f2)
-          new_major=$((major+1))
-          tag="v$new_major.0.0"
-          echo "::set-output name=tag::$tag"
-
       - name: Release pushed tag
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ steps.get_previous_tag.outputs.tag }}
+          tag: V0.0.0
         run: |
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
