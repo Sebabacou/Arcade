@@ -10,9 +10,11 @@ CC 			= 	g++
 NAME		=	arcade
 
 #-------- src --------#
-SRC			:= main.cpp
+SRC			:= 	main.cpp	\
+				Core.cpp
 
-VPATH		:=	src/
+VPATH		:=	src/	\
+				src/core
 
 vpath %.c $(VPATH)
 
