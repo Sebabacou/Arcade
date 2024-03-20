@@ -7,8 +7,8 @@
 
 #pragma once
 
-    #include <string>
     #include <vector>
+    #include "IObject.hpp"
 
 class Core {
     public:
@@ -23,5 +23,5 @@ class Core {
     private:
         //std::vector<IGame> _game;
         //std::vector<IDisplay> _display;
-        //std::vector<IObject *> _object;
+        std::vector<IObject *> _object;
 };

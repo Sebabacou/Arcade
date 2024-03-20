@@ -13,8 +13,9 @@ NAME		=	arcade
 SRC			:= 	main.cpp	\
 				Core.cpp
 
-VPATH		:=	src/	\
-				src/core
+VPATH		:=	src/		\
+				src/core	\
+				src/object
 
 vpath %.c $(VPATH)
 
