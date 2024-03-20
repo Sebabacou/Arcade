@@ -1,31 +1,97 @@
 /*
 ** EPITECH PROJECT, 2024
-** Arcade [WSL: Ubuntu]
+** arcade
 ** File description:
 ** IDisplay
 */
 
-#ifndef IDISPLAY_HPP_
-    #define IDISPLAY_HPP_
-    #include "Color.hpp"
-    #include "IObject.hpp"
-    #include "Input.hpp"
+#pragma once
+
+#include <iostream>
+#include <memory>
+#include "Event.hpp"
+#include "Object.hpp"
+
+/**
+ * @file IDisplay.hpp
+ * @brief IDisplay class for the Arcade project
+ **/
+
+
 
 namespace Arcade {
+/**
+ * @class IDisplay
+ * @brief A class to represent a display in the Arcade project.
+ *
+ * This class contains methods to get the input, draw an object, clear the window, update the window, and play the turn.
+ */
     class IDisplay {
-        public:
-            virtual ~IDisplay() = default;
 
-        public:
-            virtual Input getInput(); //Cette fonction retourne un objet de type Input. 
-            virtual void draw(const IObject *object); // Cette fonction prend un pointeur constant vers un objet de type IObject
-            virtual void drawCircle(const IObject *object); // Cette fonction prend un pointeur constant vers un objet de type IObject
-            virtual void drawRextangle(const IObject *object); // Cette fonction prend un pointeur constant vers un objet de type IObject
-            virtual void drawText(const IObject *object); // Cette fonction prend un pointeur constant vers un objet de type IObject
-            virtual void clearWindow(); // Cette fonction efface le contenu de la fenêtre d'affichage.
-            virtual void updateWindow(); // Cette fonction met à jour le contenu de la fenêtre d'affichage après avoir effectué tous les dessins nécessaires.
-            virtual bool playTurn(); //  Cette fonction effectue une itération de jeu, généralement utilisée dans le contexte d'un jeu vidéo ou d'une simulation.
+    public:
+        /**
+         * @brief Construct a new IDisplay object
+         *
+         */
+        IDisplay() = default;
+
+        /**
+         * @brief Destroy the IDisplay object
+         *
+         */
+        virtual ~IDisplay() = default;
+
+        /**
+         * @brief Get the last input get by the graphic library
+         *
+         * @return Input
+         */
+        virtual Arcade::Event getInput() = 0;
+
+        /**
+         * @brief Draw the object
+         *
+         * @param object
+         */
+        virtual void draw(std::shared_ptr<Arcade::Object> object) = 0;
+
+        /**
+         * @brief Clear the window
+         *
+         */
+        virtual void clearWindow() = 0;
+
+        /**
+         * @brief Update the window
+         *
+         */
+        virtual void updateWindow() = 0;
+
+        /**
+         * @brief Play the next turn of game
+         *
+         * @return int number of turn to play
+         */
+        virtual int playTurn() = 0;
+
+    private:
+        /**
+         * @brief Draw a rectangle
+         *
+         * @param object
+         */
+        virtual void drawRectangle(const std::shared_ptr<Arcade::Object> object) = 0;
+        /**
+         * @brief Draw a circle
+         *
+         * @param object
+         */
+        virtual void drawCircle(const std::shared_ptr<Arcade::Object> object) = 0;
+        /**
+         * @brief Draw a text
+         *
+         * @param object
+         */
+        virtual void drawText(const std::shared_ptr<Arcade::Object> object) = 0;
     };
 }
-
-#endif /* !IDISPLAY_HPP_ */
