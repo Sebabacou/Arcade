@@ -10,18 +10,20 @@
     #include <vector>
     #include "IObject.hpp"
 
-class Core {
-    public:
-        Core(std::string lib, std::string game);
-        Core(const Core &obj);
-        ~Core();
-    public:
-        void mainLoop();
-        void refreshLib();
-    public:
-        Core &operator=(const Core &obj);
-    private:
-        //std::vector<IGame> _game;
-        //std::vector<IDisplay> _display;
-        std::vector<IObject *> _object;
-};
+namespace Arcade {
+    class Core {
+        public:
+            Core(std::string lib, std::string game);
+            Core(const Arcade::Core &obj);
+            ~Core();
+        public:
+            void mainLoop();
+            void refreshLib();
+        public:
+            Arcade::Core &operator=(const Arcade::Core &obj);
+        private:
+            //std::vector<Arcade::IGame> _game;
+            //std::vector<Arcade::IDisplay> _display;
+            std::vector<Arcade::IObject *> _object;
+    };
+}

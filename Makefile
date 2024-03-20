@@ -15,7 +15,7 @@ SRC			:= 	main.cpp	\
 
 VPATH		:=	src/		\
 				src/core	\
-				src/object
+				src/common
 
 vpath %.c $(VPATH)
 

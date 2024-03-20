@@ -7,13 +7,13 @@
 
 #include "Core.hpp"
 
-Core::Core(std::string display, std::string game)
+Arcade::Core::Core(std::string display, std::string game)
 {
     (void)display;
     (void)game;
 }
 
-Core::Core(const Core &obj)
+Arcade::Core::Core(const Arcade::Core &obj)
 {
     (void)obj;
     //this->_display = obj.display;
@@ -21,19 +21,19 @@ Core::Core(const Core &obj)
     //this->_object = obj.object;
 }
 
-Core::~Core()
+Arcade::Core::~Core()
 {
 }
 
-void Core::mainLoop()
+void Arcade::Core::mainLoop()
 {
 }
 
-void Core::refreshLib()
+void Arcade::Core::refreshLib()
 {
 }
 
-Core &Core::operator=(const Core &obj)
+Arcade::Core &Arcade::Core::operator=(const Arcade::Core &obj)
 {
     if (&obj == this)
         return *this;
