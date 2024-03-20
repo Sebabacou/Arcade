@@ -8,7 +8,7 @@
 #pragma once
 
     #include <vector>
-    #include "IObject.hpp"
+    #include "Object.hpp"
 
 namespace Arcade {
     class Core {
@@ -24,6 +24,6 @@ namespace Arcade {
         private:
             //std::vector<Arcade::IGame> _game;
             //std::vector<Arcade::IDisplay> _display;
-            std::vector<Arcade::IObject *> _object;
+            std::vector<Arcade::Object *> _object;
     };
 }
