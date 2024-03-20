@@ -16,7 +16,8 @@ SRC			:= 	main.cpp	\
 VPATH		:=	src/		\
 				src/core	\
 				src/common	\
-				src/display
+				src/display	\
+				src/game
 
 vpath %.c $(VPATH)
 
