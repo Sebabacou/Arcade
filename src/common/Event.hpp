@@ -37,6 +37,7 @@ namespace Arcade {
         NEXT_LIB, ///< Represents the 'NEXT_LIB' key
         MENU, ///< Represents the 'MENU' key
         GAME_SHOOT,
+        REFRESH,
         NONE, ///< Represents no key
     };
 }

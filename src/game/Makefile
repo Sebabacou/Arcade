@@ -6,27 +6,26 @@
 ##
 
 CC 			= 	g++
+LD			=	ld
 
-NAME		=	arcade
+NAME		=	libtemplate.so
 
 #-------- src --------#
-SRC			:= 	main.cpp	\
-				Core.cpp
+SRC			:= 	template.cpp
 
-VPATH		:=	src/		\
-				src/core	\
-				src/common	\
-				src/display	\
-				src/game
+VPATH		:=	./
+VPATH		+=	../common/
+VPATH		+=	template/
 
 vpath %.cpp $(VPATH)
 
-BUILD_DIR	=	build
+BUILD_DIR	=	../../build/game
 
 OBJ			=	$(SRC:%.cpp=$(BUILD_DIR)/%.o)
 
 IFLAGS		=	$(foreach dir,$(VPATH),-I $(dir))
-CPPFLAGS	=	-Wall -Wextra $(IFLAGS)
+CPPFLAGS	=	-Wall -Wextra $(IFLAGS) -f elf64 -fPIC
+LDFLAGS		=	-shared
 
 TMP_FILES	=	*.gcno					\
     			*.gcda					\
@@ -58,11 +57,11 @@ all:	$(NAME)
 
 $(BUILD_DIR)/%.o: %.cpp
 	@ mkdir -p $(@D)
-	@ $(CC) $(CFLAGS) -c $< -o $@ $(CPPFLAGS)
+	@ $(CC) -c $< -o $@ $(CPPFLAGS)
 	@ $(ECHO) "$(C_GREEN)[OK] -> $<$(C_RESET)"
 
 $(NAME):  $(OBJ)
-	@ $(CC) -o $@ $^ $(CPPFLAGS)
+	@ $(LD) -o $@ $^ $(LDFLAGS)
 	@ $(ECHO) "$(C_PINK)|==========> $(NAME) compiled. <==========|$(C_RESET)"
 
 clean:
@@ -73,8 +72,8 @@ fclean:		clean
 
 re:		fclean all
 
-debug: CFLAGS += -g
-debug: CFLAGS += -Werror
+debug: CPPFLAGS += -g
+debug: CPPFLAGS += -Werror
 debug: re
 
 .PHONY: all re clean fclean debug
