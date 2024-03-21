@@ -2,6 +2,7 @@
 # Prerequisites
 *.d
 arcade
+build/
 # Compiled Object files
 *.slo
 *.lo
