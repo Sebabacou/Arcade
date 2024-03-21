@@ -24,7 +24,10 @@ jobs:
           fetch-depth: 0
       - name: Check compilation
         run: |
-          make && make clean && make fclean && make re
+          mkdir ./build/ && cd ./build/
+          cmake .. -G “Unix Makefiles” -DCMAKE_BUILD_TYPE=Release
+          cmake --build .
+          cd ..
       - name: Check binary
         run: |
           if [ ! -f ${{ env.BINARIES }} ]; then
