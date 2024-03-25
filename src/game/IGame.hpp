@@ -17,17 +17,14 @@
  * @file IGame.hpp
  * @brief IGame class for the Arcade project
  **/
-
-
 namespace Arcade {
-/**
- * @class IGame
- * @brief A class to represent a game in the Arcade project.
- *
- * This class contains methods to play a turn, start the game, and get the score.
- */
+    /**
+     * @class IGame
+     * @brief A class to represent a game in the Arcade project.
+     *
+     * This class contains methods to play a turn, start the game, and get the score.
+     */
     class IGame {
-
         public:
             /**
              * @brief Destroy the IGame object
@@ -35,6 +32,7 @@ namespace Arcade {
              */
             virtual ~IGame() = default;
 
+        public:
             /**
              * @brief Play a turn
              *
