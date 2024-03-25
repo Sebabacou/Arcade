@@ -8,6 +8,8 @@ SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Werror -g")
 
 include_directories(src/core)
 include_directories(src/common)
+include_directories(src/display)
+include_directories(src/game)
 
 add_subdirectory(src/game/template)
 
