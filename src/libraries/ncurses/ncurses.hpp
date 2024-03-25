@@ -5,12 +5,12 @@
 ** NCurses
 */
 
-#ifndef NCURSES_HPP_
+#pragma once
     #define NCURSES_HPP_
     #include <iostream>
     #include <memory>
-    #include "IDisplay.hpp"
-    #include "Event.hpp"
+    #include <IDisplay.hpp>
+    #include <Event.hpp>
     #include <unistd.h>
     #include <ncurses.h>
 
@@ -43,5 +43,3 @@ namespace Arcade {
 
     extern "C" Arcade::IDisplay *entryPointDisplay();
 }
-
-#endif /* !NCURSES_HPP_ */

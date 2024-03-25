@@ -42,12 +42,10 @@ namespace Arcade {
 
         refresh();
         switch (ch) {
-            case KEY_F(1): {
+            case KEY_F(1):
                 return (Event::PREV_LIB);
-            }
-            case KEY_F(2): {
+            case KEY_F(2):
                 return (Event::NEXT_LIB);
-            }
             case KEY_F(3):
                 return (Event::PREV_GAME);
             case KEY_F(4):
@@ -66,9 +64,8 @@ namespace Arcade {
                 return (Event::GAME_LEFT);
             case KEY_RIGHT:
                 return (Event::GAME_RIGHT);
-            case KEY_ESCAPE: {
+            case KEY_ESCAPE:
                 return (Event::ESCAPE);
-            }
             case KEY_BACKSPACE:
                 return (Event::BACKSPACE);
             case 'a':
