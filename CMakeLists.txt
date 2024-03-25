@@ -8,11 +8,14 @@ SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Werror -g")
 
 include_directories(src/core)
 include_directories(src/common)
+include_directories(src/display)
+include_directories(src/game)
 
-add_subdirectory(src/game/template)
 
 add_executable(arcade
         src/main.cpp
+        src/display/IDisplay.hpp
+        src/game/IGame.hpp
         src/common/Event.hpp
         src/common/Color.hpp
         src/common/Object.hpp
@@ -20,6 +23,8 @@ add_executable(arcade
         src/core/Core.hpp)
 
 TARGET_LINK_LIBRARIES(arcade dl)
+
+add_subdirectory(src/game/template)
 
 add_custom_command(TARGET arcade POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:arcade>
