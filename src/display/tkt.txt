@@ -1,0 +1,53 @@
+            /**
+             * @brief Destroy the IDisplay object
+             *
+             */
+
+                       /**
+             * @brief Get the last input get by the graphic library
+             *
+             * @return Input
+             */
+
+                         /**
+             * @brief Draw the object
+             *
+             * @param object
+             */
+
+
+                   /**
+             * @brief Clear the window
+             *
+             */
+
+                         /**
+             * @brief Update the window
+             *
+             */
+
+
+                         /**
+             * @brief Play the next turn of game
+             *
+             * @return int number of turn to play
+             */
+
+
+                         /**
+             * @brief Draw a rectangle
+             *
+             * @param object
+             */
+
+                         /**
+             * @brief Draw a circle
+             *
+             * @param object
+             */
+
+                         /**
+             * @brief Draw a text
+             *
+             * @param object
+             */
