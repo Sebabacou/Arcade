@@ -7,9 +7,8 @@
 
 #pragma once
 
-    #include <vector>
+    #include <memory>
     #include <list>
-    #include "Object.hpp"
     #include "IGame.hpp"
     #include "IDisplay.hpp"
 
@@ -17,17 +16,16 @@ namespace Arcade {
     class Core {
         public:
             Core(std::string lib, std::string game);
-            Core(const Arcade::Core &obj);
+            Core(const Core &obj);
             ~Core();
         public:
             void mainLoop();
             void refreshLib();
         public:
-            Arcade::Core &operator=(const Arcade::Core &obj);
+            Arcade::Core &operator=(const Core &obj);
         private:
-            std::vector<Arcade::IGame> _game;
-            std::vector<Arcade::IDisplay> _display;
-            std::vector<Arcade::Object *> _object;
+            std::shared_ptr<IGame> _game;
+            std::shared_ptr<IDisplay> _display;
             std::list<std::string> _games;
             std::list<std::string> _libs;
     };

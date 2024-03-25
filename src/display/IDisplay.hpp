@@ -27,65 +27,17 @@ namespace Arcade {
  * This class contains methods to get the input, draw an object, clear the window, update the window, and play the turn.
  */
     class IDisplay {
-
-    public:
-        /**
-         * @brief Destroy the IDisplay object
-         *
-         */
-        virtual ~IDisplay() = default;
-
-        /**
-         * @brief Get the last input get by the graphic library
-         *
-         * @return Input
-         */
-        virtual Arcade::Event getInput() = 0;
-
-        /**
-         * @brief Draw the object
-         *
-         * @param object
-         */
-        virtual void draw(std::shared_ptr<Arcade::Object> object) = 0;
-
-        /**
-         * @brief Clear the window
-         *
-         */
-        virtual void clearWindow() = 0;
-
-        /**
-         * @brief Update the window
-         *
-         */
-        virtual void updateWindow() = 0;
-
-        /**
-         * @brief Play the next turn of game
-         *
-         * @return int number of turn to play
-         */
-        virtual int playTurn() = 0;
-
-    private:
-        /**
-         * @brief Draw a rectangle
-         *
-         * @param object
-         */
-        virtual void drawRectangle(const std::shared_ptr<Arcade::Object> object) = 0;
-        /**
-         * @brief Draw a circle
-         *
-         * @param object
-         */
-        virtual void drawCircle(const std::shared_ptr<Arcade::Object> object) = 0;
-        /**
-         * @brief Draw a text
-         *
-         * @param object
-         */
-        virtual void drawText(const std::shared_ptr<Arcade::Object> object) = 0;
+        public:
+            virtual ~IDisplay() = default;
+        public:
+            virtual Event getInput() = 0;
+            virtual void draw(std::shared_ptr<Object> object) = 0;
+            virtual void clearWindow() = 0;
+            virtual void updateWindow() = 0;
+            virtual int playTurn() = 0;
+        private:
+            virtual void drawRectangle(const std::shared_ptr<Object> object) = 0;
+            virtual void drawCircle(const std::shared_ptr<Object> object) = 0;
+            virtual void drawText(const std::shared_ptr<Object> object) = 0;
     };
 }

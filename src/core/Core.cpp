@@ -5,8 +5,8 @@
 ** Core.cpp
 */
 
-#include <compare>
-#include <filesystem>
+//#include <compare>
+//#include <experimental/filesystem>
 #include "Core.hpp"
 
 Arcade::Core::Core(std::string display, std::string game)
@@ -19,7 +19,6 @@ Arcade::Core::Core(const Arcade::Core &obj)
 {
     this->_display = obj._display;
     this->_game = obj._game;
-    this->_object = obj._object;
 }
 
 Arcade::Core::~Core()
@@ -32,10 +31,10 @@ void Arcade::Core::mainLoop()
 
 void Arcade::Core::refreshLib()
 {
-    std::string libFolder = "./lib/";
-
-    for (const auto &entry : std::filesystem::directory_iterator)
-        std::cout << entry.path().filename() << std::endl;
+    //std::string libFolder = "./lib/";
+//
+    //for (const auto &entry : std::experimental::filesystem::directory_iterator(libFolder))
+    //    std::cout << entry.path().filename() << std::endl;
 }
 
 Arcade::Core &Arcade::Core::operator=(const Arcade::Core &obj)
@@ -44,6 +43,5 @@ Arcade::Core &Arcade::Core::operator=(const Arcade::Core &obj)
         return *this;
     this->_display = obj._display;
     this->_game = obj._game;
-    this->_object = obj._object;
     return *this;
 }
