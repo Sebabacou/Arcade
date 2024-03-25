@@ -128,6 +128,58 @@ namespace Arcade {
         }
     }
 
+    void NCurses::draw(std::shared_ptr<Arcade::Object> object)
+    {
+        if (object->getType() == Rectangle)
+            drawRectangle(object);
+        else if (object->getType() == Text)
+            drawText(object);
+        else if (object->getType() == Circle)
+            drawCircle(object);
+    }
+
+    void NCurses::drawRectangle(std::shared_ptr<Arcade::Object> object)
+    {
+        int x = object->getPosition().getX() * WIDTH;
+        int y = object->getPosition().getY() * HEIGHT;
+        int color = object->getColor();
+
+        attron(COLOR_PAIR(color));
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                mvprintw(y + j, x + i, " ");
+            }
+        }
+        attroff(COLOR_PAIR(color));
+    }
+
+    void NCurses::drawCircle(std::shared_ptr<Arcade::Object> object)
+    {
+        int x       = object->getPosition().getX() * WIDTH;
+        int y       = object->getPosition().getY() * HEIGHT;
+        int color   = object->getColor();
+        int radius  = 1;
+
+        attron(COLOR_PAIR(color));
+        for (int i = 0; i < SIZE; i++) {
+            for (int j = 0; j < SIZE; j++) {
+                mvprintw(y + j, x + i, " ");
+            }
+        }
+        attroff(COLOR_PAIR(color));
+    }
+
+    void NCurses::drawText(std::shared_ptr<Arcade::Object> object)
+    {
+        int x = object->getPosition().getX() * WIDTH;
+        int y = object->getPosition().getY() * HEIGHT;
+        int color = object->getColor();
+
+        attron(COLOR_PAIR(10 + color));
+        mvprintw(y, x, object->getAsset().c_str());
+        attroff(COLOR_PAIR(10 + color));
+    }
+
     int NCurses::playTurn()
     {
 
@@ -154,7 +206,6 @@ namespace Arcade {
         init_pair(17, COLOR_WHITE, COLOR_BLACK);
         init_pair(18, COLOR_WHITE, COLOR_BLACK);
     }
-
 }
 
 extern "C" Arcade::IDisplay *entryDisplayPoint()

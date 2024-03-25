@@ -15,8 +15,9 @@
     #include <ncurses.h>
 
     #define WIDTH 4
-    #define HEIGHT (SQUARE_WIDTH / 2)
+    #define HEIGHT (WIDTH / 2)
     #define KEY_ESCAPE 27
+    #define SIZE 1
 
 
 namespace Arcade {
