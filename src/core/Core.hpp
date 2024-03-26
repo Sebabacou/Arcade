@@ -34,8 +34,21 @@ namespace Arcade {
                 private:
                     std::string _msg;
             };
-        private:
-            bool libIsChecked(const std::list<std::string> libList, const std::string lib) const;
+
+            class CoreLib {
+                public:
+                    CoreLib();
+                    CoreLib(const CoreLib &obj);
+                    ~CoreLib();
+                public:
+                    void *openLib(const std::string libPath) const;
+                    void closeLib(void *libOpened) const;
+                    bool isDisplayLib(void *libOpened, bool closeLib = true) const;
+                    bool isGameLib(void *libOpened, bool closeLib = true) const;
+                    bool libIsChecked(const std::list<std::string> libList, const std::string lib) const;
+                public:
+                    CoreLib &operator=(const CoreLib &obj);
+            };
         private:
             std::shared_ptr<IGame> _game;
             std::shared_ptr<IDisplay> _display;
