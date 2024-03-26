@@ -10,9 +10,12 @@
 
 int main(void)
 {
-    std::cout << "Hello World" << std::endl;
-    Arcade::Core test("hey","hello");
-
-    test.refreshLib();
+    try {
+        std::cout << "Hello World" << std::endl;
+        Arcade::Core test("hey","hello");
+        test.refreshLib();
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+    }
     return 0;
 }
