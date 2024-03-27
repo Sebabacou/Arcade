@@ -10,6 +10,7 @@
     #include <memory>
     #include <list>
     #include <exception>
+    #include <dlfcn.h>
     #include "IGame.hpp"
     #include "IDisplay.hpp"
 
@@ -22,6 +23,7 @@ namespace Arcade {
         public:
             void mainLoop();
             void refreshLib();
+            void menuManager(Event userInput);
         public:
             Arcade::Core &operator=(const Core &obj);
         public:
@@ -46,6 +48,17 @@ namespace Arcade {
                     bool isDisplayLib(void *libOpened, bool closeLib = true) const;
                     bool isGameLib(void *libOpened, bool closeLib = true) const;
                     bool libIsChecked(const std::list<std::string> libList, const std::string lib) const;
+                    template<typename T>
+                    T *libLoader(const std::string pathToLib) {
+                        void *handler = this->openLib(pathToLib);
+                        void *(*fptr)();
+
+                        if (this->isDisplayLib(handler, false))
+                            fptr = (void*(*)())dlsym(handler, "entryPointDisplay");
+                        else
+                            fptr = (void*(*)())dlsym(handler, "entryPointGame");
+                        return ((T *)fptr());
+                    };
                 public:
                     CoreLib &operator=(const CoreLib &obj);
             };
@@ -55,6 +68,7 @@ namespace Arcade {
             std::list<std::string> _games;
             std::list<std::string> _libs;
             std::string _libInUse;
+            std::string _gameInUse = "";
             bool _isPlaying = true;
             bool _isDisplayMenu = true;
     };

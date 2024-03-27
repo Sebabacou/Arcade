@@ -5,7 +5,6 @@
 ** Core.cpp
 */
 
-#include <dlfcn.h>
 #include <filesystem>
 #include <iostream>
 #include "Core.hpp"
@@ -32,13 +31,14 @@ void Arcade::Core::mainLoop()
 {
     CoreLib libManager;
     std::vector<std::shared_ptr<Object>> objects;
+    this->_display = std::unique_ptr<IDisplay>(libManager.libLoader<IDisplay>(this->_libInUse));
 
     while (_isPlaying) {
         Event input = this->_display.get()->getInput();
         for (int turnToPlay = this->_display.get()->playTurn(); turnToPlay > 0; turnToPlay--) {
             if (_isDisplayMenu) {
-                std::cout << "Je dois display un menu" << std::endl;
-                return;
+                this->menuManager(input);
+                continue;
             }
             switch (input) {
                 case Event::NEXT_LIB:
@@ -67,6 +67,18 @@ void Arcade::Core::mainLoop()
                     break;
             }
         }
+    }
+}
+
+void Arcade::Core::menuManager(Arcade::Event userInput)
+{
+    std::shared_ptr<Object> obj = std::make_shared<Object>(Object(0, 0, Type::Text, Color::WHITE, "TEST"));
+    this->_display.get()->clearWindow();
+    this->_display.get()->draw(obj);
+    this->_display.get()->updateWindow();
+    if (userInput == Event::ESCAPE) {
+        this->_isPlaying = false;
+        std::cout << "USER ESCAPE" << std::endl;
     }
 }
 
