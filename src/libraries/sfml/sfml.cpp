@@ -20,7 +20,7 @@ namespace Arcade {
 
     Event SFML::getInput()
     {
-         sf::Event   event = {};
+        sf::Event event = {};
 
         while (_window.pollEvent(event)) {
             if (event.type == sf::Event::Closed)

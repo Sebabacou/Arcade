@@ -155,7 +155,6 @@ namespace Arcade {
         int x = object->getPosition().getX() * WIDTH;
         int y = object->getPosition().getY() * HEIGHT;
         int color = object->getColor();
-        int radius = 1;
 
         attron(COLOR_PAIR(color));
         for (int i = 0; i < SIZE; i++) {
@@ -175,11 +174,6 @@ namespace Arcade {
         attron(COLOR_PAIR(10 + color));
         mvprintw(y, x, object->getAsset().c_str());
         attroff(COLOR_PAIR(10 + color));
-    }
-
-    int NCurses::playTurn()
-    {
-
     }
 
     void NCurses::defineColor()
