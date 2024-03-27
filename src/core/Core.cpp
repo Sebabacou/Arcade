@@ -36,21 +36,25 @@ void Arcade::Core::refreshLib()
     std::string libFolder = "./lib/";
     Core::CoreLib libFunctions;
 
-    for (const auto &entry : std::filesystem::directory_iterator(libFolder)) {
-        std::string libName = libFolder + (std::string)entry.path().filename();
-        if (libFunctions.libIsChecked(this->_libs, libName) || libFunctions.libIsChecked(this->_games, libName))
-            continue;
-        void *handle = libFunctions.openLib(libName);
-        if (libFunctions.isDisplayLib(handle, false)) {
-            this->_libs.push_back(libName);
-            libFunctions.closeLib(handle);
-            continue;
+    try {
+        for (const auto &entry : std::filesystem::directory_iterator(libFolder)) {
+            std::string libName = libFolder + (std::string)entry.path().filename();
+            if (libFunctions.libIsChecked(this->_libs, libName) || libFunctions.libIsChecked(this->_games, libName))
+                continue;
+            void *handle = libFunctions.openLib(libName);
+            if (libFunctions.isDisplayLib(handle, false)) {
+                this->_libs.push_back(libName);
+                libFunctions.closeLib(handle);
+                continue;
+            }
+            if (libFunctions.isGameLib(handle)) {
+                this->_games.push_back(libName);
+                continue;
+            }
+            throw Core::CoreError("Core : The lib [" + libName + "] is not a valid lib.");
         }
-        if (libFunctions.isGameLib(handle)) {
-            this->_games.push_back(libName);
-            continue;
-        }
-        throw Core::CoreError("Core : The lib [" + libName + "] is not a valid lib.");
+    } catch (std::exception &e) {
+        throw;
     }
 }
 

@@ -10,6 +10,7 @@ include_directories(src/core)
 include_directories(src/common)
 include_directories(src/display)
 include_directories(src/game)
+include_directories(src/errors)
 
 
 add_executable(arcade
@@ -20,7 +21,9 @@ add_executable(arcade
         src/common/Color.hpp
         src/common/Object.hpp
         src/core/Core.cpp
-        src/core/Core.hpp)
+        src/core/Core.hpp
+        src/errors/ErrorHandler.cpp
+        src/errors/ErrorHandler.hpp)
 
 TARGET_LINK_LIBRARIES(arcade dl)
 
