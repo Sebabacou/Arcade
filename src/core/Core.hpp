@@ -16,7 +16,7 @@
 namespace Arcade {
     class Core {
         public:
-            Core(std::string lib, std::string game);
+            Core(std::string display);
             Core(const Core &obj);
             ~Core();
         public:
@@ -41,7 +41,7 @@ namespace Arcade {
                     CoreLib(const CoreLib &obj);
                     ~CoreLib();
                 public:
-                    void *openLib(const std::string libPath) const;
+                    void *openLib(const std::string libPath, const bool throwOnError = false) const;
                     void closeLib(void *libOpened) const;
                     bool isDisplayLib(void *libOpened, bool closeLib = true) const;
                     bool isGameLib(void *libOpened, bool closeLib = true) const;
@@ -50,9 +50,12 @@ namespace Arcade {
                     CoreLib &operator=(const CoreLib &obj);
             };
         private:
-            std::shared_ptr<IGame> _game;
-            std::shared_ptr<IDisplay> _display;
+            std::unique_ptr<IGame> _game;
+            std::unique_ptr<IDisplay> _display;
             std::list<std::string> _games;
             std::list<std::string> _libs;
+            std::string _libInUse;
+            bool _isPlaying = true;
+            bool _isDisplayMenu = true;
     };
 }

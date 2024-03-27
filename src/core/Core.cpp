@@ -7,20 +7,21 @@
 
 #include <dlfcn.h>
 #include <filesystem>
+#include <iostream>
 #include "Core.hpp"
 
 /* ----------------------------------- CORE ------------------------------------------ */
 
-Arcade::Core::Core(std::string display, std::string game)
+Arcade::Core::Core(std::string display) : _libInUse(display)
 {
-    (void)display;
-    (void)game;
+    this->refreshLib();
 }
 
 Arcade::Core::Core(const Arcade::Core &obj)
 {
-    this->_display = obj._display;
-    this->_game = obj._game;
+    this->_games = obj._games;
+    this->_libs = obj._libs;
+    this->_libInUse = obj._libInUse;
 }
 
 Arcade::Core::~Core()
@@ -29,6 +30,44 @@ Arcade::Core::~Core()
 
 void Arcade::Core::mainLoop()
 {
+    CoreLib libManager;
+    std::vector<std::shared_ptr<Object>> objects;
+
+    while (_isPlaying) {
+        Event input = this->_display.get()->getInput();
+        for (int turnToPlay = this->_display.get()->playTurn(); turnToPlay > 0; turnToPlay--) {
+            if (_isDisplayMenu) {
+                std::cout << "Je dois display un menu" << std::endl;
+                return;
+            }
+            switch (input) {
+                case Event::NEXT_LIB:
+                    break;
+                case Event::NEXT_GAME:
+                    break;
+                case Event::MENU:
+                    this->_isDisplayMenu = true;
+                    break;
+                case Event::ESCAPE:
+                    this->_isPlaying = false;
+                    break;
+                case Event::PREV_GAME:
+                    break;
+                case Event::PREV_LIB:
+                    break;
+                case Event::REFRESH:
+                    this->refreshLib();
+                    break;
+                default:
+                    objects = this->_game.get()->Turn(input);
+                    this->_display.get()->clearWindow();
+                    for (auto object : objects)
+                        this->_display.get()->draw(object);
+                    this->_display.get()->updateWindow();
+                    break;
+            }
+        }
+    }
 }
 
 void Arcade::Core::refreshLib()
@@ -36,25 +75,20 @@ void Arcade::Core::refreshLib()
     std::string libFolder = "./lib/";
     Core::CoreLib libFunctions;
 
-    try {
-        for (const auto &entry : std::filesystem::directory_iterator(libFolder)) {
-            std::string libName = libFolder + (std::string)entry.path().filename();
-            if (libFunctions.libIsChecked(this->_libs, libName) || libFunctions.libIsChecked(this->_games, libName))
-                continue;
-            void *handle = libFunctions.openLib(libName);
-            if (libFunctions.isDisplayLib(handle, false)) {
-                this->_libs.push_back(libName);
-                libFunctions.closeLib(handle);
-                continue;
-            }
-            if (libFunctions.isGameLib(handle)) {
-                this->_games.push_back(libName);
-                continue;
-            }
-            throw Core::CoreError("Core : The lib [" + libName + "] is not a valid lib.");
+    for (const auto &entry : std::filesystem::directory_iterator(libFolder)) {
+        std::string libName = libFolder + (std::string)entry.path().filename();
+        if (libFunctions.libIsChecked(this->_libs, libName) || libFunctions.libIsChecked(this->_games, libName))
+            continue;
+        void *handle = libFunctions.openLib(libName);
+        if (libFunctions.isDisplayLib(handle, false)) {
+            this->_libs.push_back(libName);
+            libFunctions.closeLib(handle);
+            continue;
         }
-    } catch (std::exception &e) {
-        throw;
+        if (libFunctions.isGameLib(handle)) {
+            this->_games.push_back(libName);
+            continue;
+        }
     }
 }
 
@@ -62,8 +96,9 @@ Arcade::Core &Arcade::Core::operator=(const Arcade::Core &obj)
 {
     if (&obj == this)
         return *this;
-    this->_display = obj._display;
-    this->_game = obj._game;
+    this->_games = obj._games;
+    this->_libs = obj._libs;
+    this->_libInUse = obj._libInUse;
     return *this;
 }
 
@@ -83,11 +118,11 @@ Arcade::Core::CoreLib::~CoreLib()
 {
 }
 
-void *Arcade::Core::CoreLib::openLib(const std::string libPath) const
+void *Arcade::Core::CoreLib::openLib(const std::string libPath, const bool throwOnError) const
 {
     void *handle = dlopen(libPath.c_str(), RTLD_LAZY);
 
-    if (handle == NULL)
+    if (handle == NULL && throwOnError)
         throw Core::CoreError("Core : Fail to open lib [" + libPath + "].");
     return handle;
 }
@@ -102,6 +137,8 @@ bool Arcade::Core::CoreLib::isDisplayLib(void *libOpened, bool closeLib) const
     void *(*fptr)();
     bool result = false;
 
+    if (!libOpened)
+        return result;
     fptr = (void*(*)())dlsym(libOpened, "entryPointDisplay");
     if (fptr != NULL)
         result = true;
@@ -115,6 +152,8 @@ bool Arcade::Core::CoreLib::isGameLib(void *libOpened, bool closeLib) const
     void *(*fptr)();
     bool result = false;
 
+    if (!libOpened)
+        return result;
     fptr = (void*(*)())dlsym(libOpened, "entryPointGame");
     if (fptr != NULL)
         result = true;

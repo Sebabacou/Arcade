@@ -15,6 +15,8 @@ int main(int ac, char **av)
     try {
         errorHandler.checkArgumentsNumber(ac);
         errorHandler.checkLibValidity(av[1]);
+        Arcade::Core core(av[1]);
+        core.mainLoop();
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
         return 84;
