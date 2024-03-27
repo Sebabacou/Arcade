@@ -9,13 +9,19 @@
 
 #include "IGame.hpp"
 
-class template_game: Arcade::IGame {
-    public:
-        template_game();
-        ~template_game();
-        std::vector<std::shared_ptr<Arcade::Object>> Turn(Arcade::Event event);
-        void init();
-        int getScore();
-    private:
-        int _score;
-};
+namespace Arcade {
+    class template_game: Arcade::IGame {
+        public:
+            template_game();
+            ~template_game();
+            std::vector<std::shared_ptr<Arcade::Object>> Turn(Arcade::Event event);
+            void init();
+            int getScore();
+        private:
+            int _score;
+
+
+    };
+
+    extern "C" Arcade::IGame *entryPointGame();
+}

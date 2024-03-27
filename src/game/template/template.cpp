@@ -7,27 +7,27 @@
 
 #include "template.hpp"
 
-template_game::template_game()
+Arcade::template_game::template_game()
 {
     _score = 0;
 }
 
-template_game::~template_game()
+Arcade::template_game::~template_game()
 {
 }
 
-std::vector<std::shared_ptr<Arcade::Object>> template_game::Turn(Arcade::Event event)
+std::vector<std::shared_ptr<Arcade::Object>> Arcade::template_game::Turn(Arcade::Event event)
 {
     (void)event;
     std::vector<std::shared_ptr<Arcade::Object>> objects;
     return objects;
 }
 
-void template_game::init()
+void Arcade::template_game::init()
 {
 }
 
-int template_game::getScore()
+int Arcade::template_game::getScore()
 {
     return _score;
 }

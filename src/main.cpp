@@ -6,9 +6,18 @@
 */
 
 #include <iostream>
+#include "ErrorHandler.hpp"
 
-int main(void)
+int main(int ac, char **av)
 {
-    std::cout << "Hello World" << std::endl;
+    Arcade::ErrorHandler errorHandler;
+
+    try {
+        errorHandler.checkArgumentsNumber(ac);
+        errorHandler.checkLibValidity(av[1]);
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
+        return 84;
+    }
     return 0;
 }
