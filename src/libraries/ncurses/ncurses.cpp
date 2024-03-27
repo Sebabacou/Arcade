@@ -152,10 +152,10 @@ namespace Arcade {
 
     void NCurses::drawCircle(std::shared_ptr<Arcade::Object> object)
     {
-        int x       = object->getPosition().getX() * WIDTH;
-        int y       = object->getPosition().getY() * HEIGHT;
-        int color   = object->getColor();
-        int radius  = 1;
+        int x = object->getPosition().getX() * WIDTH;
+        int y = object->getPosition().getY() * HEIGHT;
+        int color = object->getColor();
+        int radius = 1;
 
         attron(COLOR_PAIR(color));
         for (int i = 0; i < SIZE; i++) {
@@ -203,6 +203,19 @@ namespace Arcade {
         init_pair(17, COLOR_WHITE, COLOR_BLACK);
         init_pair(18, COLOR_WHITE, COLOR_BLACK);
     }
+
+    int NCurses::playTurn()
+    {
+       float dif = clock() - _clock;
+       int result = dif / 60;
+
+       if (result >= 1) {
+        _clock = clock();
+        return result;
+       } 
+       return 0;
+    }
+
 }
 
 extern "C" Arcade::IDisplay *entryDisplayPoint()
