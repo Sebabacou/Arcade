@@ -195,7 +195,6 @@ namespace Arcade {
         sf::Time time = _clock.getElapsedTime();
         float s = time.asSeconds();
 
-        std::cout << s << std::endl;
         if (s >= 0.3f) {
             _clock.restart();
             return static_cast<int>(s / 0.3f);
