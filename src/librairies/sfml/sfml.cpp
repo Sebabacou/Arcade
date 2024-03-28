@@ -8,6 +8,7 @@
 #include "sfml.hpp"
 
 namespace Arcade {
+
     void SFML::clearWindow()
     {
         _window.clear(sf::Color::Black);
@@ -110,6 +111,7 @@ namespace Arcade {
                     break;
             }
         }
+        return NONE;
     }
 
     sf::Color SFML::defineColor(Arcade::Color color)
@@ -151,7 +153,7 @@ namespace Arcade {
         sf::Texture texture;
         sf::RectangleShape rectangle(sf::Vector2f(SIZE, SIZE));
 
-        rectangle.setPosition((float)object->getPosition().getX() * SIZE, (float)object->getPosition().getY() * SIZE);
+        rectangle.setPosition(object->getPosition().getX() * SIZE, object->getPosition().getY() * SIZE);
         if (object->getAsset().empty() != 0 && access(object->getAsset().c_str(), F_OK ) != -1 && texture.loadFromFile(object->getAsset())) {
             rectangle.setTexture(&texture);
         }
@@ -162,10 +164,10 @@ namespace Arcade {
 
     void SFML::drawCircle(std::shared_ptr<Arcade::Object> object)
     {
-        sf::Texture     texture;
+        sf::Texture texture;
         sf::CircleShape Circle((float) SIZE / 2);
 
-        Circle.setPosition((float)object->getPosition().getX() * SIZE, (float)object->getPosition().getY() * SIZE);
+        Circle.setPosition(object->getPosition().getX() * SIZE, object->getPosition().getY() * SIZE);
         if (object->getAsset().empty() != 0 && access(object->getAsset().c_str(), F_OK ) != -1 && texture.loadFromFile(object->getAsset())) {
             Circle.setTexture(&texture);
         }
@@ -180,10 +182,11 @@ namespace Arcade {
         sf::Font font;
 
         sfText.setString(object->getAsset());
-        sfText.setPosition((float)object->getPosition().getX() * SIZE, (float)object->getPosition().getY() * SIZE);
+        sfText.setPosition(object->getPosition().getX() * SIZE, object->getPosition().getY() * SIZE);
         sfText.setFillColor(defineColor(object->getColor()));
-        if (access(FONT, F_OK ) != -1 && font.loadFromFile(FONT))
+        if (font.loadFromFile(FONT)) {
             sfText.setFont(font);
+        }
         _window.draw(sfText);
     }
 
@@ -192,16 +195,17 @@ namespace Arcade {
         sf::Time time = _clock.getElapsedTime();
         float s = time.asSeconds();
 
+        std::cout << s << std::endl;
         if (s >= 0.3f) {
             _clock.restart();
             return static_cast<int>(s / 0.3f);
         }
-    return 0;
+        return 0;
     }
 
 }
 
-extern "C" Arcade::IDisplay *entryDisplayPoint()
+extern "C" Arcade::IDisplay *entryPointDisplay()
 {
     return (new Arcade::SFML());
 }
