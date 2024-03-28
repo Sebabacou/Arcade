@@ -6,7 +6,6 @@
 */
 
 #pragma once
-    #define NCURSES_HPP_
     #include <iostream>
     #include <memory>
     #include <IDisplay.hpp>
@@ -18,7 +17,6 @@
     #define HEIGHT (WIDTH / 2)
     #define KEY_ESCAPE 27
     #define SIZE 1
-
 
 namespace Arcade {
     class NCurses : public Arcade::IDisplay {

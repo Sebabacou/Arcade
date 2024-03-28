@@ -10,16 +10,16 @@
 namespace Arcade {
 
     NCurses::NCurses()
-        {
-            initscr();
-            noecho();
-            keypad(stdscr, TRUE);
-            nodelay(stdscr, TRUE);
-            start_color();
-            defineColor();
-            curs_set(0);
-            refresh();
-        }
+    {
+        initscr();
+        noecho();
+        keypad(stdscr, TRUE);
+        nodelay(stdscr, TRUE);
+        start_color();
+        defineColor();
+        curs_set(0);
+        refresh();
+    }
 
     NCurses::~NCurses()
     {
