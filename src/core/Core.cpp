@@ -14,6 +14,8 @@
 Arcade::Core::Core(std::string display) : _libInUse(display)
 {
     this->refreshLib();
+    if (this->_games.size() != 0)
+        this->_gameInUse = this->_games.front();
 }
 
 Arcade::Core::Core(const Arcade::Core &obj)
@@ -79,14 +81,6 @@ void Arcade::Core::manageInput(Arcade::Event &userInput, std::vector<std::shared
         userInput = Event::NONE;
 }
 
-std::vector<std::shared_ptr<Arcade::Object>> Arcade::Core::menuManager() const
-{
-    std::vector<std::shared_ptr<Object>> objects;
-
-    objects.push_back(std::make_shared<Object>(Object(20, 11, Type::Rectangle, Color::WHITE)));
-    return objects;
-}
-
 void Arcade::Core::refreshLib()
 {
     std::string libFolder = "./lib/";
@@ -117,6 +111,70 @@ Arcade::Core &Arcade::Core::operator=(const Arcade::Core &obj)
     this->_libs = obj._libs;
     this->_libInUse = obj._libInUse;
     return *this;
+}
+
+/* ----------------------------------- MENU MANAGER ------------------------------------------ */
+
+std::vector<std::shared_ptr<Arcade::Object>> Arcade::Core::menuManager() const
+{
+    std::vector<std::shared_ptr<Object>> objects;
+    Arcade::Object::Position pos(6, 5);
+
+    objects.push_back(std::make_shared<Object>(Object(16, 1, Type::Text, Color::WHITE, "Arcade")));
+    this->displayLibs(pos, objects);
+    this->displayGames(pos, objects);
+    objects.push_back(std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, "Username :")));
+    return objects;
+}
+
+void Arcade::Core::displayLibs(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const
+{
+    std::shared_ptr<Object> display = std::make_shared<Object>(Object(1, 5, Type::Text, Color::WHITE, "Display :"));
+
+    objects.push_back(display);
+    for (auto displayLib : this->_libs) {
+        objects.push_back(std::make_shared<Object>(Object(pos, Arcade::Type::Text,
+        displayLib == this->_libInUse ? Arcade::Color::GREEN : Arcade::Color::WHITE, this->getLibName(displayLib))));
+        if (pos.getX() + 5 >= 30) {
+            pos.setX(display->getPosition().getX() + 5);
+            pos.setY(pos.getY() + 2);
+        } else {
+            pos.setX(pos.getX() + 5);
+        }
+    }
+    pos.setX(display->getPosition().getX());
+    pos.setY(pos.getY() + 3);
+}
+
+void Arcade::Core::displayGames(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const
+{
+    std::shared_ptr<Object> game = std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, "Game :"));
+
+    objects.push_back(game);
+    pos.setX(pos.getX() + 5);
+    for (auto gameLib : this->_games) {
+        objects.push_back(std::make_shared<Object>(Object(pos, Arcade::Type::Text,
+        gameLib == this->_gameInUse ? Arcade::Color::GREEN : Arcade::Color::WHITE, gameLib)));
+        if (pos.getX() + 5 >= 30) {
+            pos.setX(game->getPosition().getX() + 5);
+            pos.setY(pos.getY() + 2);
+        } else {
+            pos.setX(pos.getX() + 5);
+        }
+    }
+    pos.setX(1);
+    pos.setY(20);
+}
+
+std::string Arcade::Core::getLibName(const std::string lib) const
+{
+    std::string result = lib;
+
+    if (result.compare(0, 6, "./lib/") == 0)
+        result.replace(0, 6, "");
+    if (result.compare(result.length() - 3, 3, ".so") == 0)
+        result.replace(result.length() - 3, 3, "");
+    return result;
 }
 
 /* ----------------------------------- CORELIB ------------------------------------------ */
@@ -193,3 +251,4 @@ Arcade::Core::CoreLib &Arcade::Core::CoreLib::operator=(const Arcade::Core::Core
     (void)obj;
     return *this;
 }
+

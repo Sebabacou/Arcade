@@ -23,8 +23,12 @@ namespace Arcade {
         public:
             void mainLoop();
             void refreshLib();
-            std::vector<std::shared_ptr<Object>> menuManager() const;
             void manageInput(Event &userInput, std::vector<std::shared_ptr<Object>> objects);
+        public:
+            std::vector<std::shared_ptr<Object>> menuManager() const;
+            void displayLibs(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
+            void displayGames(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
+            std::string getLibName(const std::string lib) const;
         public:
             Arcade::Core &operator=(const Core &obj);
         public:
@@ -58,6 +62,7 @@ namespace Arcade {
                             fptr = (void*(*)())dlsym(handler, "entryPointDisplay");
                         else
                             fptr = (void*(*)())dlsym(handler, "entryPointGame");
+                        dlclose(handler);
                         return ((T *)fptr());
                     };
                 public:
