@@ -32,54 +32,59 @@ void Arcade::Core::mainLoop()
     CoreLib libManager;
     std::vector<std::shared_ptr<Object>> objects;
     this->_display = std::unique_ptr<IDisplay>(libManager.libLoader<IDisplay>(this->_libInUse));
+    Arcade::Event lastEvent = Event::NONE;
 
     while (_isPlaying) {
-        Event input = this->_display.get()->getInput();
-        for (int turnToPlay = this->_display.get()->playTurn(); turnToPlay > 0; turnToPlay--) {
-            if (_isDisplayMenu) {
-                this->menuManager(input);
-                continue;
-            }
-            switch (input) {
-                case Event::NEXT_LIB:
-                    break;
-                case Event::NEXT_GAME:
-                    break;
-                case Event::MENU:
-                    this->_isDisplayMenu = true;
-                    break;
-                case Event::ESCAPE:
-                    this->_isPlaying = false;
-                    break;
-                case Event::PREV_GAME:
-                    break;
-                case Event::PREV_LIB:
-                    break;
-                case Event::REFRESH:
-                    this->refreshLib();
-                    break;
-                default:
-                    objects = this->_game.get()->Turn(input);
-                    this->_display.get()->clearWindow();
-                    for (auto object : objects)
-                        this->_display.get()->draw(object);
-                    this->_display.get()->updateWindow();
-                    break;
-            }
+        Event input = this->_display->getInput();
+        if (input != Event::NONE)
+            lastEvent = input;
+        for (int turnToPlay = this->_display->playTurn(); turnToPlay > 0; turnToPlay--) {
+            if (_isDisplayMenu)
+                objects = this->menuManager();
+            else
+                objects = this->menuManager();
+            this->manageInput(lastEvent, objects);
         }
     }
 }
 
-void Arcade::Core::menuManager(Arcade::Event userInput)
+void Arcade::Core::manageInput(Arcade::Event &userInput, std::vector<std::shared_ptr<Object>> objects)
 {
-    std::shared_ptr<Object> obj = std::make_shared<Object>(Object(0, 0, Type::Text, Color::WHITE, "TEST"));
-    this->_display.get()->clearWindow();
-    this->_display.get()->draw(obj);
-    this->_display.get()->updateWindow();
-    if (userInput == Event::ESCAPE) {
-        this->_isPlaying = false;
-        std::cout << "USER ESCAPE" << std::endl;
-    }
+    switch (userInput) {
+        case Event::NEXT_LIB:
+            break;
+        case Event::NEXT_GAME:
+            break;
+        case Event::MENU:
+            this->_isDisplayMenu = true;
+            break;
+        case Event::ESCAPE:
+            this->_isPlaying = false;
+            break;
+        case Event::PREV_GAME:
+            break;
+        case Event::PREV_LIB:
+            break;
+        case Event::REFRESH:
+            this->refreshLib();
+            break;
+        default:
+            this->_display.get()->clearWindow();
+            for (auto object : objects) {
+                this->_display.get()->draw(object);
+            }
+            this->_display.get()->updateWindow();
+            break;
+        }
+        userInput = Event::NONE;
+}
+
+std::vector<std::shared_ptr<Arcade::Object>> Arcade::Core::menuManager() const
+{
+    std::vector<std::shared_ptr<Object>> objects;
+
+    objects.push_back(std::make_shared<Object>(Object(20, 11, Type::Rectangle, Color::WHITE)));
+    return objects;
 }
 
 void Arcade::Core::refreshLib()
@@ -132,7 +137,7 @@ Arcade::Core::CoreLib::~CoreLib()
 
 void *Arcade::Core::CoreLib::openLib(const std::string libPath, const bool throwOnError) const
 {
-    void *handle = dlopen(libPath.c_str(), RTLD_LAZY);
+    void *handle = dlopen(libPath.c_str(), RTLD_NOW | RTLD_NODELETE);
 
     if (handle == NULL && throwOnError)
         throw Core::CoreError("Core : Fail to open lib [" + libPath + "].");

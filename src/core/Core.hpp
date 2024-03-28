@@ -23,7 +23,8 @@ namespace Arcade {
         public:
             void mainLoop();
             void refreshLib();
-            void menuManager(Event userInput);
+            std::vector<std::shared_ptr<Object>> menuManager() const;
+            void manageInput(Event &userInput, std::vector<std::shared_ptr<Object>> objects);
         public:
             Arcade::Core &operator=(const Core &obj);
         public:
