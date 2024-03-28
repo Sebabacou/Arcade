@@ -2,29 +2,29 @@
 ** EPITECH PROJECT, 2024
 ** Arcade [WSL: Ubuntu]
 ** File description:
-** NCurses
+** sfml
 */
 
 #pragma once
-    #define NCURSES_HPP_
     #include <iostream>
     #include <memory>
     #include <IDisplay.hpp>
     #include <Event.hpp>
     #include <unistd.h>
-    #include <ncurses.h>
+    #include <SFML/Window.hpp>
+    #include <SFML/Graphics.hpp>
 
-    #define WIDTH 4
-    #define HEIGHT (WIDTH / 2)
-    #define KEY_ESCAPE 27
-    #define SIZE 1
+    #define FONT "librairies/assets/arial.ttf"
 
+    #define SIZE 40
 
 namespace Arcade {
-    class NCurses : public Arcade::IDisplay {
+    class SFML : public Arcade::IDisplay {
         public:
-            NCurses();
-            ~NCurses();
+            SFML() : _window(sf::VideoMode(1920, 1080), "SFML window") {
+                _clock.restart();
+            };
+            ~SFML() { _window.close(); };
 
         public:
             Arcade::Event getInput() override;
@@ -37,8 +37,9 @@ namespace Arcade {
             void drawRectangle(const std::shared_ptr<Arcade::Object> object) override;
             void drawCircle(const std::shared_ptr<Arcade::Object> object) override;
             void drawText(const std::shared_ptr<Arcade::Object> object) override;
-            void defineColor();
-            clock_t _clock = clock();
+            static sf::Color defineColor(Arcade::Color color);
+            sf::RenderWindow _window;
+            sf::Clock _clock;
     };
 
     extern "C" Arcade::IDisplay *entryPointDisplay();

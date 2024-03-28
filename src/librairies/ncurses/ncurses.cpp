@@ -10,16 +10,16 @@
 namespace Arcade {
 
     NCurses::NCurses()
-        {
-            initscr();
-            noecho();
-            keypad(stdscr, TRUE);
-            nodelay(stdscr, TRUE);
-            start_color();
-            defineColor();
-            curs_set(0);
-            refresh();
-        }
+    {
+        initscr();
+        noecho();
+        keypad(stdscr, TRUE);
+        nodelay(stdscr, TRUE);
+        start_color();
+        defineColor();
+        curs_set(0);
+        refresh();
+    }
 
     NCurses::~NCurses()
     {
@@ -172,7 +172,7 @@ namespace Arcade {
         int color = object->getColor();
 
         attron(COLOR_PAIR(10 + color));
-        mvprintw(y, x, object->getAsset().c_str());
+        mvprintw(y, x, "%s", object->getAsset().c_str());
         attroff(COLOR_PAIR(10 + color));
     }
 
@@ -200,19 +200,19 @@ namespace Arcade {
 
     int NCurses::playTurn()
     {
-       float dif = clock() - _clock;
-       int result = dif / 60;
+        float dif = clock() - _clock;
+        int result = dif / 1000000;
 
-       if (result >= 1) {
-        _clock = clock();
-        return result;
-       } 
-       return 0;
+        if (result >= 1) {
+            _clock = clock();
+            return result;
+        } 
+        return 0;
     }
 
 }
 
-extern "C" Arcade::IDisplay *entryDisplayPoint()
+extern "C" Arcade::IDisplay *entryPointDisplay()
 {
     return (new Arcade::NCurses());
 }
