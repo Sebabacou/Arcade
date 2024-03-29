@@ -54,8 +54,10 @@ void Arcade::Core::manageInput(Arcade::Event &userInput, std::vector<std::shared
 {
     switch (userInput) {
         case Event::NEXT_LIB:
+            this->switchNextLib<IDisplay>(this->_libs, this->_libInUse, this->_display);
             break;
         case Event::NEXT_GAME:
+            this->switchNextLib<IGame>(this->_games, this->_gameInUse, this->_game);
             break;
         case Event::MENU:
             this->_isDisplayMenu = true;
@@ -64,8 +66,10 @@ void Arcade::Core::manageInput(Arcade::Event &userInput, std::vector<std::shared
             this->_isPlaying = false;
             break;
         case Event::PREV_GAME:
+            this->switchPrevLib<IGame>(this->_games, this->_gameInUse, this->_game);
             break;
         case Event::PREV_LIB:
+            this->switchPrevLib<IDisplay>(this->_libs, this->_libInUse, this->_display);
             break;
         case Event::REFRESH:
             this->refreshLib();
