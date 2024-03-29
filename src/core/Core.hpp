@@ -68,6 +68,47 @@ namespace Arcade {
                 public:
                     CoreLib &operator=(const CoreLib &obj);
             };
+        public:
+            template<typename T>
+            void switchNextLib(std::list<std::string> listToCheck, std::string &libInUse, std::unique_ptr<T> &objToChange)
+            {
+                CoreLib libManager;
+
+                if (listToCheck.empty())
+                    return;
+                for (auto it = listToCheck.begin(); it != listToCheck.end(); it++) {
+                    if (*it == libInUse) {
+                        it++;
+                        if (it != listToCheck.end()) {
+                            libInUse = *it;
+                            objToChange = std::unique_ptr<T>(libManager.libLoader<T>(libInUse));
+                            return;
+                        }
+                        break;
+                    }
+                }
+                libInUse = *listToCheck.begin();
+                objToChange = std::unique_ptr<T>(libManager.libLoader<T>(libInUse));
+            };
+
+            template<typename T>
+            void switchPrevLib(std::list<std::string> listToCheck, std::string &libInUse, std::unique_ptr<T> &objToChange)
+            {
+                CoreLib libManager;
+
+                if (listToCheck.empty())
+                    return;
+                for (auto it = listToCheck.begin(); it != listToCheck.end(); it++) {
+                    if (*it == libInUse && it != listToCheck.begin()) {
+                        it--;
+                        libInUse = *it;
+                        objToChange = std::unique_ptr<T>(libManager.libLoader<T>(libInUse));
+                        return;
+                    }
+                }
+                libInUse = *(--listToCheck.end());
+                objToChange = std::unique_ptr<T>(libManager.libLoader<T>(libInUse));
+            };
         private:
             std::unique_ptr<IGame> _game;
             std::unique_ptr<IDisplay> _display;
