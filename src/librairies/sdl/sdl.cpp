@@ -30,19 +30,15 @@ namespace Arcade {
 
         while(SDL_PollEvent(&event)) {
             switch (event.type) {
-                case SDL_QUIT: {
+                case SDL_QUIT:
                     return (Event::ESCAPE);
-                }
                 case SDL_KEYDOWN:
-                    if (event.key.keysym.sym == SDLK_ESCAPE) {
+                    if (event.key.keysym.sym == SDLK_ESCAPE)
                         return (Event::ESCAPE);
-                    }
-                    if (event.key.keysym.sym == SDLK_F1) {
+                    if (event.key.keysym.sym == SDLK_F1)
                         return (Event::PREV_LIB);
-                    }
-                    if (event.key.keysym.sym == SDLK_F2) {
+                    if (event.key.keysym.sym == SDLK_F2)
                         return (Event::NEXT_LIB);
-                    }
                     if (event.key.keysym.sym == SDLK_F3)
                         return (Event::PREV_GAME);
                     if (event.key.keysym.sym == SDLK_F4)
