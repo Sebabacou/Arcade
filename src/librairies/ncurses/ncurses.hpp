@@ -38,6 +38,6 @@ namespace Arcade {
             void defineColor();
             clock_t _clock = clock();
     };
-
-    extern "C" Arcade::IDisplay *entryPointDisplay();
 }
+
+extern "C" Arcade::IDisplay *entryPointDisplay();

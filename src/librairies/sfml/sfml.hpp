@@ -41,6 +41,6 @@ namespace Arcade {
             sf::RenderWindow _window;
             sf::Clock _clock;
     };
-
-    extern "C" Arcade::IDisplay *entryPointDisplay();
 }
+
+extern "C" Arcade::IDisplay *entryPointDisplay();
