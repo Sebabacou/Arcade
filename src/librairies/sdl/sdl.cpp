@@ -294,3 +294,8 @@ namespace Arcade {
         }
     }
 }
+
+extern "C" Arcade::IDisplay *entryPointDisplay()
+{
+    return (new Arcade::Sdl());
+}
