@@ -39,7 +39,7 @@ void Arcade::ErrorHandler::checkLibValidity(const char *pathToLib) const
     std::string stringPath = pathToLib;
 
     try {
-        void *handler = libChecker.openLib(stringPath);
+        void *handler = libChecker.openLib(stringPath, true);
         if (!libChecker.isDisplayLib(handler))
             throw ErrorHandler::Error("ErrorHandler : This lib " + stringPath + " does not correspond \
             project architecture");

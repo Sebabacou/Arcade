@@ -6,7 +6,6 @@
 */
 
 #pragma once
-    #define NCURSES_HPP_
     #include <iostream>
     #include <memory>
     #include <IDisplay.hpp>

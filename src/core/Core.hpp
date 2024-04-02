@@ -10,18 +10,25 @@
     #include <memory>
     #include <list>
     #include <exception>
+    #include <dlfcn.h>
     #include "IGame.hpp"
     #include "IDisplay.hpp"
 
 namespace Arcade {
     class Core {
         public:
-            Core(std::string lib, std::string game);
+            Core(std::string display);
             Core(const Core &obj);
             ~Core();
         public:
             void mainLoop();
             void refreshLib();
+            void manageInput(Event &userInput, std::vector<std::shared_ptr<Object>> objects);
+        public:
+            std::vector<std::shared_ptr<Object>> menuManager() const;
+            void displayLibs(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
+            void displayGames(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
+            std::string getLibName(const std::string lib) const;
         public:
             Arcade::Core &operator=(const Core &obj);
         public:
@@ -41,18 +48,75 @@ namespace Arcade {
                     CoreLib(const CoreLib &obj);
                     ~CoreLib();
                 public:
-                    void *openLib(const std::string libPath) const;
+                    void *openLib(const std::string libPath, const bool throwOnError = false) const;
                     void closeLib(void *libOpened) const;
                     bool isDisplayLib(void *libOpened, bool closeLib = true) const;
                     bool isGameLib(void *libOpened, bool closeLib = true) const;
                     bool libIsChecked(const std::list<std::string> libList, const std::string lib) const;
+                    template<typename T>
+                    T *libLoader(const std::string pathToLib) {
+                        void *handler = this->openLib(pathToLib);
+                        void *(*fptr)();
+
+                        if (this->isDisplayLib(handler, false))
+                            fptr = (void*(*)())dlsym(handler, "entryPointDisplay");
+                        else
+                            fptr = (void*(*)())dlsym(handler, "entryPointGame");
+                        dlclose(handler);
+                        return ((T *)fptr());
+                    };
                 public:
                     CoreLib &operator=(const CoreLib &obj);
             };
+        public:
+            template<typename T>
+            void switchNextLib(std::list<std::string> listToCheck, std::string &libInUse, std::unique_ptr<T> &objToChange)
+            {
+                CoreLib libManager;
+
+                if (listToCheck.empty())
+                    return;
+                for (auto it = listToCheck.begin(); it != listToCheck.end(); it++) {
+                    if (*it == libInUse) {
+                        it++;
+                        if (it != listToCheck.end()) {
+                            libInUse = *it;
+                            objToChange = std::unique_ptr<T>(libManager.libLoader<T>(libInUse));
+                            return;
+                        }
+                        break;
+                    }
+                }
+                libInUse = *listToCheck.begin();
+                objToChange = std::unique_ptr<T>(libManager.libLoader<T>(libInUse));
+            };
+
+            template<typename T>
+            void switchPrevLib(std::list<std::string> listToCheck, std::string &libInUse, std::unique_ptr<T> &objToChange)
+            {
+                CoreLib libManager;
+
+                if (listToCheck.empty())
+                    return;
+                for (auto it = listToCheck.begin(); it != listToCheck.end(); it++) {
+                    if (*it == libInUse && it != listToCheck.begin()) {
+                        it--;
+                        libInUse = *it;
+                        objToChange = std::unique_ptr<T>(libManager.libLoader<T>(libInUse));
+                        return;
+                    }
+                }
+                libInUse = *(--listToCheck.end());
+                objToChange = std::unique_ptr<T>(libManager.libLoader<T>(libInUse));
+            };
         private:
-            std::shared_ptr<IGame> _game;
-            std::shared_ptr<IDisplay> _display;
+            std::unique_ptr<IGame> _game;
+            std::unique_ptr<IDisplay> _display;
             std::list<std::string> _games;
             std::list<std::string> _libs;
+            std::string _libInUse;
+            std::string _gameInUse = "";
+            bool _isPlaying = true;
+            bool _isDisplayMenu = true;
     };
 }
