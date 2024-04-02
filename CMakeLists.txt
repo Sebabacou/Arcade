@@ -30,6 +30,7 @@ TARGET_LINK_LIBRARIES(arcade dl)
 add_subdirectory(src/game/template)
 add_subdirectory(src/librairies/ncurses)
 add_subdirectory(src/librairies/sfml)
+add_subdirectory(src/librairies/sdl)
 
 add_custom_command(TARGET arcade POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:arcade>
