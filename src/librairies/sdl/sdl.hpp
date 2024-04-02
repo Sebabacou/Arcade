@@ -56,6 +56,6 @@ namespace Arcade {
             clock_t _clock = clock();
             std::unordered_map<std::string, SDL_Texture *> _textures;
     };
-
-    extern "C" Arcade::IDisplay *entryPointDisplay();
 }
+
+extern "C" Arcade::IDisplay *entryPointDisplay();
