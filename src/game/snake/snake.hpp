@@ -1,0 +1,41 @@
+/*
+** EPITECH PROJECT, 2024
+** Arcade
+** File description:
+** snake
+*/
+
+#pragma once
+
+#include "IGame.hpp"
+#include <map>
+
+#define MAP_X 21
+#define MAP_Y 21
+
+#define UP 0
+#define DOWN 1
+#define LEFT 2
+#define RIGHT 3
+
+namespace Arcade {
+    class snake: public Arcade::IGame {
+        public:
+            snake();
+            ~snake();
+            std::vector<std::shared_ptr<Arcade::Object>> Turn(Arcade::Event event);
+            void init();
+            int getScore();
+        private:
+            void _move_snake(int direction_x, int direction_y);
+            void _do_movement(int direction);
+            void _set_direction(int direction);
+            bool _check_colide(int x, int y);
+        private:
+            int _score;
+            std::vector<std::shared_ptr<Arcade::Object>> _game;
+            int _direction;
+            int _len;
+    };
+}
+extern "C" Arcade::IGame *entryPointGame();
