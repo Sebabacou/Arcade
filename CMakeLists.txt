@@ -31,7 +31,7 @@ add_executable(arcade
 
 TARGET_LINK_LIBRARIES(arcade dl)
 
-add_subdirectory(src/game/template)
+add_subdirectory(src/game/snake)
 add_subdirectory(src/librairies/ncurses)
 add_subdirectory(src/librairies/sfml)
 add_subdirectory(src/librairies/sdl)
