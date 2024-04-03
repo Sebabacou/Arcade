@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0)
 project(arcade)
 
 set(CMAKE_CXX_STANDARD 20)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -fno-gnu-unique")
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Werror -g")
 
 
@@ -22,6 +22,10 @@ add_executable(arcade
         src/common/Object.hpp
         src/core/Core.cpp
         src/core/Core.hpp
+        src/core/Menu.hpp
+        src/core/Menu.cpp
+        src/core/LibHandler.cpp
+        src/core/LibHandler.hpp
         src/errors/ErrorHandler.cpp
         src/errors/ErrorHandler.hpp)
 

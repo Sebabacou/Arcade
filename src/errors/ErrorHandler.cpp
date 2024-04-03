@@ -35,7 +35,7 @@ void Arcade::ErrorHandler::checkArgumentsNumber(const int ac) const
 
 void Arcade::ErrorHandler::checkLibValidity(const char *pathToLib) const
 {
-    Core::CoreLib libChecker;
+    LibHandler libChecker;
     std::string stringPath = pathToLib;
 
     try {

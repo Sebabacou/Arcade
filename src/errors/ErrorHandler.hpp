@@ -9,7 +9,7 @@
 
     #include <exception>
     #include <string>
-    #include "Core.hpp"
+    #include "LibHandler.hpp"
 
 namespace Arcade {
     class ErrorHandler {
