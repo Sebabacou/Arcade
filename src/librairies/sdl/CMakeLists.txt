@@ -1,5 +1,5 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 3.0)
-set(LIB_NAME sdl)
+set(LIB_NAME arcade_sdl)
 
 set(CMAKE_CXX_STANDARD 20)
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra")
@@ -16,4 +16,4 @@ add_library(${LIB_NAME} SHARED ${SOURCES})
 target_link_libraries(${LIB_NAME} SDL2_image SDL2_ttf)
 add_custom_command(TARGET ${LIB_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:${LIB_NAME}>
-        ${PROJECT_SOURCE_DIR}/arcade_/$<TARGET_FILE_NAME:${LIB_NAME}>)
+        ${PROJECT_SOURCE_DIR}/lib/$<TARGET_FILE_NAME:${LIB_NAME}>)
