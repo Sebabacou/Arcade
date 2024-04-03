@@ -16,7 +16,7 @@
     #include <unistd.h>
     #include <unordered_map>
 
-    #define FONT "assets/Aria.ttf"
+    #define FONT "librairies/assets/arial.ttf"
     #define SIZE 40
 
 
