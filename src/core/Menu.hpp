@@ -32,6 +32,7 @@ namespace Arcade {
             std::vector<std::shared_ptr<Object>> menuManager(const Event userInput);
             void displayLibs(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
             void displayGames(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
+            void displayScore(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
             std::string getLibName(const std::string lib) const;
             void handleUsernameInput(const Event userInput);
             void handleScore(const int playerScore);

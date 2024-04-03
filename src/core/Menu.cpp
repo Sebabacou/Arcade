@@ -54,12 +54,13 @@ namespace Arcade {
     std::vector<std::shared_ptr<Arcade::Object>> Arcade::Menu::menuManager(const Event userInput)
     {
         std::vector<std::shared_ptr<Object>> objects;
-        Arcade::Object::Position pos(6, 5);
+        Arcade::Object::Position pos(5, 5);
 
         this->handleUsernameInput(userInput);
-        objects.push_back(std::make_shared<Object>(Object(16, 1, Type::Text, Color::WHITE, "Arcade")));
+        objects.push_back(std::make_shared<Object>(Object(23, 1, Type::Text, Color::WHITE, "Arcade")));
         this->displayLibs(pos, objects);
         this->displayGames(pos, objects);
+        this->displayScore(pos, objects);
         objects.push_back(std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, "Username :")));
         pos.setX(5);
         pos.setY(20);
@@ -102,8 +103,24 @@ namespace Arcade {
                 pos.setX(pos.getX() + 5);
             }
         }
+        pos.setX(game->getPosition().getX());
+        pos.setY(pos.getY() + 3);
+    }
+
+    void Menu::displayScore(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const
+    {
+        std::shared_ptr<Object> game = std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, "Best :"));
+
+        objects.push_back(game);
+        pos.setX(pos.getX() + 5);
+        for (auto pair : this->_bestScore) {
+            if (pair.first == this->_gameInUse) {
+                std::string userScore = std::get<0>(pair.second) + " - " + std::to_string(std::get<1>(pair.second));
+                objects.push_back(std::make_shared<Object>(Object(pos, Arcade::Type::Text, Arcade::Color::WHITE, userScore)));
+            }
+        }
         pos.setX(1);
-        pos.setY(20);
+        pos.setY(25);
     }
 
     std::string Menu::getLibName(const std::string lib) const
