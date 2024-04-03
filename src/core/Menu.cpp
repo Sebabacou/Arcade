@@ -254,7 +254,12 @@ namespace Arcade {
 
     void Menu::saveScores() const
     {
+        std::ofstream file("./librairies/settings/scores.txt");
 
+        if (file.fail())
+            return;
+        for (const auto &pair : this->_bestScore)
+            file << pair.first << ":" << std::get<0>(pair.second) << ":" << std::get<1>(pair.second) << std::endl;
     }
 
     void Menu::getSavedScores()

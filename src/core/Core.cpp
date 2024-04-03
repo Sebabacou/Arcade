@@ -52,6 +52,7 @@ void Arcade::Core::mainLoop()
             this->manageInput(lastEvent, objects);
         }
     }
+    this->_menu->saveScores();
 }
 
 void Arcade::Core::manageInput(Arcade::Event &userInput, std::vector<std::shared_ptr<Object>> objects)
