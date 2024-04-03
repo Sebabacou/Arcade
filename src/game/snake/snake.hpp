@@ -39,18 +39,3 @@ namespace Arcade {
     };
 }
 extern "C" Arcade::IGame *entryPointGame();
-/*
-// Créer un nouveau segment de tête pour le serpent
-std::shared_ptr<Arcade::Object> newHead = std::make_shared<Arcade::Object>(Arcade::Object::Position(_game[0]->getPosition().getX() + x, _game[0]->getPosition().getY() + y), Arcade::Type::Rectangle, Arcade::Color::RED);
-
-// Insérer le nouveau segment de tête au début du serpent
-_game.insert(_game.begin(), newHead);
-
-// Supprimer le dernier segment du serpent pour maintenir la même longueur
-for (auto it = _game.begin() + _len + 1; it != _game.end(); ++it) {
-   if ((*it)->getColor() == Arcade::Color::RED) {
-       _game.erase(it);
-       break;
-   }
-}
-*/
