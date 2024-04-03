@@ -21,16 +21,16 @@ std::vector<std::shared_ptr<Arcade::Object>> Arcade::snake::Turn(Arcade::Event e
     std::cout << "Event for snake: " << event << std::endl;
     switch (event) {
         case Arcade::Event::GAME_LEFT:
-            _define_direction(LEFT);
+            _do_movement(LEFT);
             break;
         case Arcade::Event::GAME_RIGHT:
-            _define_direction(RIGHT);
+            _do_movement(RIGHT);
             break;
         case Arcade::Event::GAME_RESTART:
             init();
             break;
         default:
-            _define_direction(0);
+            _do_movement(0);
             break;
     }
     return _game;
@@ -40,13 +40,12 @@ void Arcade::snake::init()
 {
     _score = 0;
     _direction = RIGHT;
-    //_len = 4;
+    _len = 4;
     _game.clear();
     for (int i = 0; i < MAP_X; i++) {
         for (int j = 0; j < MAP_Y; j++) {
             if (i == 0 || i == MAP_X - 1 || j == 0 || j == MAP_Y - 1) {
-                std::shared_ptr<Arcade::Object> wall = std::make_shared<Arcade::Object>(Arcade::Object::Position(i, j), Arcade::Type::Rectangle, Arcade::Color::WHITE);
-                wall->setAsset("librairies/assets/snake/wall.jpg");
+                std::shared_ptr<Arcade::Object> wall = std::make_shared<Arcade::Object>(Arcade::Object::Position(i, j), Arcade::Type::Rectangle, Arcade::Color::WHITE, "librairies/assets/snake/wall.jpg");
                 _game.push_back(wall);
 
             } else {
@@ -58,6 +57,7 @@ void Arcade::snake::init()
     //    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2 - i, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::RED));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::RED));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X - 2, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE));
+    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(0, MAP_Y + 2), Arcade::Type::Text, Arcade::Color::WHITE, "Score: " + std::to_string(_score)));
 }
 
 int Arcade::snake::getScore()
@@ -71,12 +71,27 @@ void Arcade::snake::_move_snake(int x, int y)
         if (object->getColor() == Arcade::Color::RED) {
             int oldX = object->getPosition().getX();
             int oldY = object->getPosition().getY();
-
-            object->setPosition(oldX + x, oldY + y);
-
-            _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(oldX, oldY), Arcade::Type::Rectangle, Arcade::Color::GREEN));
+            if (_check_colide(oldX + x, oldY + y)) {
+                object->setPosition(oldX + x, oldY + y);
+                _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(oldX, oldY), Arcade::Type::Rectangle,Arcade::Color::GREEN));
+            }
         }
     }
+     /*
+    // Créer un nouveau segment de tête pour le serpent
+    std::shared_ptr<Arcade::Object> newHead = std::make_shared<Arcade::Object>(Arcade::Object::Position(_game[0]->getPosition().getX() + x, _game[0]->getPosition().getY() + y), Arcade::Type::Rectangle, Arcade::Color::RED);
+
+    // Insérer le nouveau segment de tête au début du serpent
+    _game.insert(_game.begin(), newHead);
+
+    // Supprimer le dernier segment du serpent pour maintenir la même longueur
+    for (auto it = _game.begin() + _len + 1; it != _game.end(); ++it) {
+        if ((*it)->getColor() == Arcade::Color::RED) {
+            _game.erase(it);
+            break;_check_colide
+        }
+    }
+     */
 }
 
 void Arcade::snake::_set_direction(int direction)
@@ -111,7 +126,7 @@ void Arcade::snake::_set_direction(int direction)
     }
 }
 
-void Arcade::snake::_define_direction(int direction)
+void Arcade::snake::_do_movement(int direction)
 {
     _set_direction(direction);
     switch (_direction) {
@@ -129,6 +144,29 @@ void Arcade::snake::_define_direction(int direction)
             break;
     }
 }
+
+bool Arcade::snake::_check_colide(int x, int y)
+{
+    for (auto &object : _game) {
+        if (object->getPosition().getX() == x && object->getPosition().getY() == y) {
+            if (object->getColor() == Arcade::Color::RED)
+                return false;
+            if (object->getColor() == Arcade::Color::WHITE)
+                return false;
+            if (object->getColor() == Arcade::Color::PURPLE) {
+                _score++;
+                object->setPosition(rand() % (MAP_X - 1), rand() % (MAP_Y - 1));
+                for (auto &i : _game) {
+                    if (i->getColor() == Arcade::Color::WHITE) {
+                        i->setAsset("Score: " + std::to_string(_score));
+                    }
+                }
+            }
+        }
+    }
+    return true;
+}
+
 
 extern "C" Arcade::IGame *entryPointGame()
 {
