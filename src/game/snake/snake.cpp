@@ -30,6 +30,7 @@ std::vector<std::shared_ptr<Arcade::Object>> Arcade::snake::Turn(Arcade::Event e
             init();
             break;
         default:
+            _define_direction(0);
             break;
     }
     return _game;
@@ -39,6 +40,7 @@ void Arcade::snake::init()
 {
     _score = 0;
     _direction = RIGHT;
+    //_len = 4;
     _game.clear();
     for (int i = 0; i < MAP_X; i++) {
         for (int j = 0; j < MAP_Y; j++) {
@@ -52,8 +54,10 @@ void Arcade::snake::init()
             }
         }
     }
+    //for (int i = 0; i < 4; i++)
+    //    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2 - i, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::RED));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::RED));
-    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2 - 1, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE));
+    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X - 2, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE));
 }
 
 int Arcade::snake::getScore()
@@ -77,14 +81,33 @@ void Arcade::snake::_move_snake(int x, int y)
 
 void Arcade::snake::_set_direction(int direction)
 {
-    if (direction == UP && _direction != DOWN) {
-        _direction = UP;
-    } else if (direction == DOWN && _direction != UP) {
-        _direction = DOWN;
-    } else if (direction == LEFT && _direction != RIGHT) {
-        _direction = LEFT;
-    } else if (direction == RIGHT && _direction != LEFT) {
-        _direction = RIGHT;
+    switch (_direction) {
+        case LEFT:
+            if (direction == LEFT)
+                _direction = DOWN;
+            if (direction == RIGHT)
+                _direction = UP;
+            break;
+        case RIGHT:
+            if (direction == LEFT)
+                _direction = UP;
+            if (direction == RIGHT)
+                _direction = DOWN;
+            break;
+        case UP:
+            if (direction == LEFT)
+                _direction = LEFT;
+            if (direction == RIGHT)
+                _direction = RIGHT;
+            break;
+        case DOWN:
+            if (direction == LEFT)
+                _direction = RIGHT;
+            if (direction == RIGHT)
+                _direction = LEFT;
+            break;
+        default:
+            break;
     }
 }
 
