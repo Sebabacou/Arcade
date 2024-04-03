@@ -11,7 +11,12 @@
     #include <string>
     #include <vector>
     #include <list>
+    #include <fstream>
+    #include <sstream>
+    #include <regex>
     #include <filesystem>
+    #include <map>
+    #include <tuple>
     #include "Object.hpp"
     #include "Event.hpp"
     #include "LibHandler.hpp"
@@ -27,8 +32,12 @@ namespace Arcade {
             std::vector<std::shared_ptr<Object>> menuManager(const Event userInput);
             void displayLibs(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
             void displayGames(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
+            void displayScore(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const;
             std::string getLibName(const std::string lib) const;
             void handleUsernameInput(const Event userInput);
+            void handleScore(const int playerScore);
+            void saveScores() const;
+            void getSavedScores();
         public:
             std::list<std::string> getGameLibs() const;
             std::list<std::string> getDisplayLibs() const;
@@ -48,5 +57,6 @@ namespace Arcade {
             std::string _libInUse;
             std::string _gameInUse = "";
             std::string _username = "";
+            std::map<std::string, std::tuple<std::string, int>> _bestScore;
     };
 }
