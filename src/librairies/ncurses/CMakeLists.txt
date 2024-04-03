@@ -14,6 +14,7 @@ file(GLOB SOURCES "*.cpp")
 add_library(${LIB_NAME} SHARED ${SOURCES})
 
 target_link_libraries(${LIB_NAME} -lncurses -ltinfo)
+set_target_properties(${LIB_NAME} PROPERTIES PREFIX "")
 add_custom_command(TARGET ${LIB_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:${LIB_NAME}>
         ${PROJECT_SOURCE_DIR}/lib/$<TARGET_FILE_NAME:${LIB_NAME}>)
