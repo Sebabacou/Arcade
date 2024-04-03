@@ -5,7 +5,6 @@
 ** Menu
 */
 
-#include <iostream>
 #include "Menu.hpp"
 #include "Core.hpp"
 
