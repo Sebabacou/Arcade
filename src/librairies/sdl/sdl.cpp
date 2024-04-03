@@ -163,12 +163,10 @@ namespace Arcade {
         if (!font) {
             throw std::runtime_error("Font Error: " + std::string(TTF_GetError()));
         }
-
         SDL_Surface *surface = TTF_RenderText_Solid(font, (object->getAsset().length() == 0) ? " " : object->getAsset().c_str(), {(Uint8)color._r, (Uint8)color._g, (Uint8)color._b, (Uint8)color._a});
         if (!surface) {
             throw std::runtime_error("Surface Error: " + std::string(TTF_GetError()));
         }
-
         SDL_Texture *texture = SDL_CreateTextureFromSurface(_renderer, surface);
         if (!texture) {
             throw std::runtime_error("Texture Error: " + std::string(SDL_GetError()));
@@ -178,7 +176,7 @@ namespace Arcade {
         rect.x = object->getPosition().getX() * SIZE;
         rect.y = object->getPosition().getY() * SIZE;
         rect.w = surface->w;
-        rect.h = surface->h ;
+        rect.h = surface->h;
         SDL_RenderCopy(_renderer, texture, NULL, &rect);
         SDL_FreeSurface(surface);
         SDL_DestroyTexture(texture);
@@ -195,8 +193,8 @@ namespace Arcade {
         SDL_Rect   rect;
         rect.x = object->getPosition().getX() * SIZE;
         rect.y = object->getPosition().getY() * SIZE;
-        rect.w = SIZE;
-        rect.h = SIZE;
+        rect.w = _surface->w;
+        rect.h = _surface->h;
 
         if (object->getAsset().empty() != 0) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);

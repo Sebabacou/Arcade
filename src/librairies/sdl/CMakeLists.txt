@@ -7,14 +7,13 @@ SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Wall -Wextra -Werror -g")
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
 
 find_package(SDL2 REQUIRED)
-find_package(SDL2TTF REQUIRED)
 include_directories(${PROJECT_SOURCE_DIR}/common)
 
 file(GLOB SOURCES "*.cpp")
 
 add_library(${LIB_NAME} SHARED ${SOURCES})
 
-target_link_libraries(${LIB_NAME} SDL2 SDL2_image SDL2_ttf)
+target_link_libraries(${LIB_NAME} SDL2_image SDL2_ttf)
 add_custom_command(TARGET ${LIB_NAME} POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy
         $<TARGET_FILE:${LIB_NAME}>
-        ${PROJECT_SOURCE_DIR}/lib/$<TARGET_FILE_NAME:${LIB_NAME}>)
+        ${PROJECT_SOURCE_DIR}/arcade_/$<TARGET_FILE_NAME:${LIB_NAME}>)
