@@ -12,6 +12,7 @@ namespace Arcade {
 
     Menu::Menu()
     {
+        this->getSavedScores();
     }
 
     Menu::Menu(const Menu &obj)
@@ -48,6 +49,8 @@ namespace Arcade {
         }
     }
 
+    /* --------------------------------------------- DISPLAY ---------------------------------------- */
+
     std::vector<std::shared_ptr<Arcade::Object>> Arcade::Menu::menuManager(const Event userInput)
     {
         std::vector<std::shared_ptr<Object>> objects;
@@ -64,7 +67,7 @@ namespace Arcade {
         return objects;
     }
 
-    void Arcade::Menu::displayLibs(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const
+    void Menu::displayLibs(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const
     {
         std::shared_ptr<Object> display = std::make_shared<Object>(Object(1, 5, Type::Text, Color::WHITE, "Display :"));
 
@@ -83,7 +86,7 @@ namespace Arcade {
         pos.setY(pos.getY() + 3);
     }
 
-    void Arcade::Menu::displayGames(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const
+    void Menu::displayGames(Object::Position &pos, std::vector<std::shared_ptr<Object>> &objects) const
     {
         std::shared_ptr<Object> game = std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, "Game :"));
 
@@ -103,7 +106,7 @@ namespace Arcade {
         pos.setY(20);
     }
 
-    std::string Arcade::Menu::getLibName(const std::string lib) const
+    std::string Menu::getLibName(const std::string lib) const
     {
         std::string result = lib;
 
@@ -114,7 +117,7 @@ namespace Arcade {
         return result;
     }
 
-    void Arcade::Menu::handleUsernameInput(const Event userInput)
+    void Menu::handleUsernameInput(const Event userInput)
     {
         switch (userInput)
         {
@@ -235,6 +238,42 @@ namespace Arcade {
         }
     }
 
+    /* --------------------------------------------- SCORES ---------------------------------------- */
+
+    void Menu::handleScore(const int playerScore)
+    {
+        for (auto &pair : this->_bestScore) {
+            if (pair.first == this->_gameInUse && std::get<1>(pair.second) < playerScore) {
+                std::get<0>(pair.second) = this->_username;
+                std::get<1>(pair.second) = playerScore;
+                return;
+            }
+        }
+        this->_bestScore[this->_gameInUse] = std::make_tuple(this->_username, playerScore);
+    }
+
+    void Menu::saveScores() const
+    {
+
+    }
+
+    void Menu::getSavedScores()
+    {
+        std::ifstream fileContent("./librairies/settings/scores.txt");
+        std::string line;
+        std::smatch matches;
+        std::regex pattern(R"(([^:]+):([^:]+):([^:]+))");
+
+        if (fileContent.fail())
+            return;
+        while (std::getline(fileContent, line)) {
+            if (std::regex_search(line, matches, pattern))
+                this->_bestScore[matches[1]] = std::make_tuple(matches[2], std::stoi(matches[3]));
+        }
+    }
+
+    /* --------------------------------------------- GET / SET ---------------------------------------- */
+
     std::list<std::string> Menu::getGameLibs() const
     {
         return this->_games;
@@ -284,6 +323,8 @@ namespace Arcade {
     {
         this->_username = username;
     }
+
+    /* --------------------------------------------- OPERATORS ---------------------------------------- */
 
     Menu &Menu::operator=(const Menu &obj)
     {
