@@ -31,10 +31,13 @@ namespace Arcade {
             void _do_movement(int direction);
             void _set_direction(int direction);
             bool _check_colide(int x, int y);
+            void _spawn_fruit(std::shared_ptr<Arcade::Object> fruit);
+            std::vector<std::shared_ptr<Arcade::Object>> _return_all_objects();
             std::vector<std::shared_ptr<Arcade::Object>> _is_dead();
         private:
             int _score;
             std::vector<std::shared_ptr<Arcade::Object>> _game;
+            std::vector<std::shared_ptr<Arcade::Object>> _snake;
             int _direction;
             int _len;
             bool _alive;
