@@ -147,7 +147,7 @@ namespace Arcade {
         rect.w = SIZE;
         rect.h = SIZE;
 
-        if (object->getAsset().empty() != 0 && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
+        if (object->getAsset().empty() && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             Colors color = object->getColor();
@@ -198,7 +198,7 @@ namespace Arcade {
         rect.w = _surface->w;
         rect.h = _surface->h;
 
-        if (object->getAsset().empty() != 0) {
+        if (object->getAsset().empty()) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             SDL_SetRenderDrawColor(_renderer, color._r, color._g, color._b, color._a);
@@ -256,7 +256,6 @@ namespace Arcade {
                 _a = 128;
                 break;
             case Arcade::Color::BLACK:
-                printf("sa passse mtf\n");
                 _r = 0;
                 _g = 0;
                 _b = 0;
@@ -282,9 +281,9 @@ namespace Arcade {
         float dif = clock() - _clock;
         float s = dif / 1000000;
 
-        if (s >= 5) {
+        if (s >= 0.4) {
             _clock = 0;
-            return static_cast<int>(s / 5);
+            return static_cast<int>(s / 0.4);
         }
         return 0;
     }

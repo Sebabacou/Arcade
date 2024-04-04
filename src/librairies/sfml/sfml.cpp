@@ -196,7 +196,6 @@ namespace Arcade {
         float s = time.asSeconds();
 
         if (s >= 0.4f) {
-            printf("%f\n", s);
             _clock.restart();
             return static_cast<int>(s / 0.4f);
         }
