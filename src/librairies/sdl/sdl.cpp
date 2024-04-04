@@ -145,7 +145,7 @@ namespace Arcade {
         rect.w = SIZE * SIZE;
         rect.h = SIZE * SIZE;
 
-        if (object->getAsset().empty() != 0) {
+        if (object->getAsset().empty()) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             Colors color = object->getColor();
@@ -196,7 +196,7 @@ namespace Arcade {
         rect.w = _surface->w;
         rect.h = _surface->h;
 
-        if (object->getAsset().empty() != 0) {
+        if (object->getAsset().empty()) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             SDL_SetRenderDrawColor(_renderer, color._r, color._g, color._b, color._a);
