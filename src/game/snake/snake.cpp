@@ -18,18 +18,23 @@ Arcade::snake::~snake()
 
 std::vector<std::shared_ptr<Arcade::Object>> Arcade::snake::Turn(Arcade::Event event)
 {
-    std::cout << "Event for snake: " << event << std::endl;
     switch (event) {
         case Arcade::Event::GAME_LEFT:
+            if (!_alive)
+                return _is_dead();
             _do_movement(LEFT);
             break;
         case Arcade::Event::GAME_RIGHT:
+            if (!_alive)
+                return  _is_dead();
             _do_movement(RIGHT);
             break;
         case Arcade::Event::GAME_RESTART:
             init();
             break;
         default:
+            if (!_alive)
+                return _is_dead();
             _do_movement(0);
             break;
     }
@@ -41,6 +46,7 @@ void Arcade::snake::init()
     _score = 0;
     _direction = RIGHT;
     _len = 4;
+    _alive = true;
     _game.clear();
     for (int i = 0; i < MAP_X; i++) {
         for (int j = 0; j < MAP_Y; j++) {
@@ -77,6 +83,8 @@ void Arcade::snake::_move_snake(int x, int y)
                     }
                 }
                 object->setPosition(oldX + x, oldY + y);
+            } else {
+                _alive = false;
             }
         }
     }
@@ -156,6 +164,16 @@ bool Arcade::snake::_check_colide(int x, int y)
         }
     }
     return true;
+}
+
+std::vector<std::shared_ptr<Arcade::Object>> Arcade::snake::_is_dead()
+{
+    if (_alive == false) {
+        _game.clear();
+        _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, MAP_Y / 2), Arcade::Type::Text, Arcade::Color::RED, "You died"));
+        _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, MAP_Y / 2 + 1), Arcade::Type::Text, Arcade::Color::WHITE, "Score: " + std::to_string(_score)));
+    }
+    return _game;
 }
 
 extern "C" Arcade::IGame *entryPointGame()
