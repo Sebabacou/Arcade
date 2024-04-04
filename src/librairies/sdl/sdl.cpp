@@ -145,7 +145,11 @@ namespace Arcade {
         rect.w = SIZE * SIZE;
         rect.h = SIZE * SIZE;
 
+<<<<<<< Updated upstream
         if (object->getAsset().empty()) {
+=======
+        if (object->getAsset().empty()  && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
+>>>>>>> Stashed changes
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             Colors color = object->getColor();
@@ -284,11 +288,17 @@ namespace Arcade {
             currentTime = SDL_GetTicks();
             s = (currentTime - startTime) / 1000.0f;
 
+<<<<<<< Updated upstream
             if (s >= 0.3f) {
                 startTime = SDL_GetTicks();
                 return static_cast<int>(s / 0.3f);
             }
             return 0;
+=======
+        if (s >= 0.4f) {
+            _clock = 0;
+            return static_cast<int>(s / 0.4f);
+>>>>>>> Stashed changes
         }
     }
 }
