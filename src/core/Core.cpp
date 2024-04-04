@@ -45,11 +45,14 @@ void Arcade::Core::mainLoop()
         for (int turnToPlay = this->_display->playTurn(); turnToPlay > 0; turnToPlay--) {
             if (_isDisplayMenu)
                 objects = this->_menu->menuManager(lastEvent);
-            else
+            else {
                 objects = this->_game->Turn(lastEvent);
+                this->_menu->handleScore(this->_game->getScore());
+            }
             this->manageInput(lastEvent, objects);
         }
     }
+    this->_menu->saveScores();
 }
 
 void Arcade::Core::manageInput(Arcade::Event &userInput, std::vector<std::shared_ptr<Object>> objects)
