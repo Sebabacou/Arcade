@@ -12,6 +12,7 @@ namespace Arcade {
     Sdl::Sdl()
     {
         TTF_Init();
+        SDL_Init(SDL_INIT_VIDEO);
         _window = SDL_CreateWindow("Arcade", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1920, 1080, SDL_WINDOW_SHOWN);
         _surface = SDL_GetWindowSurface(_window);
         _renderer = SDL_CreateRenderer(_window, -1, SDL_RENDERER_ACCELERATED);
@@ -22,6 +23,7 @@ namespace Arcade {
         SDL_DestroyWindow(_window);
         TTF_Quit();
         SDL_Quit();
+        _textures.clear();
     }
 
     Event Sdl::getInput()
@@ -142,10 +144,10 @@ namespace Arcade {
         SDL_Rect rect;
         rect.x = object->getPosition().getX() * SIZE;
         rect.y = object->getPosition().getY() * SIZE;
-        rect.w = SIZE * SIZE;
-        rect.h = SIZE * SIZE;
+        rect.w = SIZE;
+        rect.h = SIZE;
 
-        if (object->getAsset().empty() != 0) {
+        if (object->getAsset().empty() != 0 && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             Colors color = object->getColor();
@@ -183,14 +185,14 @@ namespace Arcade {
         TTF_CloseFont(font);
     }
 
-    void Sdl::drawCircle(std::shared_ptr<Arcade::Object> object)
+    void Sdl::drawCircle(const std::shared_ptr<Arcade::Object> object)
     {
         Colors color = object->getColor();
         int radius = SIZE / 2;
         int x = object->getPosition().getX() * SIZE;
         int y = object->getPosition().getY() * SIZE;
 
-        SDL_Rect   rect;
+        SDL_Rect rect;
         rect.x = object->getPosition().getX() * SIZE;
         rect.y = object->getPosition().getY() * SIZE;
         rect.w = _surface->w;
@@ -217,18 +219,6 @@ namespace Arcade {
     Sdl::Colors::Colors(Arcade::Color color)
     {
         switch (color) {
-            case Arcade::Color::BLACK:
-                _r = 0;
-                _g = 0;
-                _b = 0;
-                _a = 255;
-                break;
-            case Arcade::Color::WHITE:
-                _r = 255;
-                _g = 255;
-                _b = 255;
-                _a = 255;
-                break;
             case Arcade::Color::RED:
                 _r = 255;
                 _g = 0;
@@ -265,6 +255,19 @@ namespace Arcade {
                 _b = 128;
                 _a = 128;
                 break;
+            case Arcade::Color::BLACK:
+                printf("sa passse mtf\n");
+                _r = 0;
+                _g = 0;
+                _b = 0;
+                _a = 255;
+                break;
+            case Arcade::Color::WHITE:
+                _r = 255;
+                _g = 255;
+                _b = 255;
+                _a = 255;
+                break;
             default:
                 _r = 0;
                 _g = 0;
@@ -276,20 +279,14 @@ namespace Arcade {
 
     int Sdl::playTurn()
     {
-        Uint32 startTime = SDL_GetTicks();
-        Uint32 currentTime = SDL_GetTicks();
-        float s;
+        float dif = clock() - _clock;
+        float s = dif / 1000000;
 
-        while (true) {
-            currentTime = SDL_GetTicks();
-            s = (currentTime - startTime) / 1000.0f;
-
-            if (s >= 0.3f) {
-                startTime = SDL_GetTicks();
-                return static_cast<int>(s / 0.3f);
-            }
-            return 0;
+        if (s >= 5) {
+            _clock = 0;
+            return static_cast<int>(s / 5);
         }
+        return 0;
     }
 }
 
