@@ -154,8 +154,13 @@ namespace Arcade {
         sf::RectangleShape rectangle(sf::Vector2f(SIZE, SIZE));
 
         rectangle.setPosition(object->getPosition().getX() * SIZE, object->getPosition().getY() * SIZE);
+        if (_textureMap.find(object->getAsset()) != _textureMap.end()) {
+            rectangle.setTexture(&_textureMap[object->getAsset()]);
+            _window.draw(rectangle);
+        }
         if (object->getAsset().empty() && access(object->getAsset().c_str(), F_OK ) != -1 && texture.loadFromFile(object->getAsset())) {
             rectangle.setTexture(&texture);
+            _textureMap[object->getAsset()] = texture;
         }
         else
             rectangle.setFillColor(defineColor(object->getColor()));
@@ -168,7 +173,7 @@ namespace Arcade {
         sf::CircleShape Circle((float) SIZE / 2);
 
         Circle.setPosition(object->getPosition().getX() * SIZE, object->getPosition().getY() * SIZE);
-        if (object->getAsset().empty() != 0 && access(object->getAsset().c_str(), F_OK ) != -1 && texture.loadFromFile(object->getAsset())) {
+        if (object->getAsset().empty() && access(object->getAsset().c_str(), F_OK ) != -1 && texture.loadFromFile(object->getAsset())) {
             Circle.setTexture(&texture);
         }
         else
