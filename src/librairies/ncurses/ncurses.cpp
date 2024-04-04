@@ -54,12 +54,16 @@ namespace Arcade {
                 return (Event::GAME_RESTART);
             case KEY_F(6):
                 return (Event::MENU);
+            case '\n':
+                return (Event::ENTER);
             case KEY_UP:
                 return (Event::GAME_UP);
             case KEY_DOWN:
                 return (Event::GAME_DOWN);
             case KEY_LEFT:
                 return (Event::GAME_LEFT);
+            case KEY_RIGHT:
+                return (Event::GAME_RIGHT);
             case KEY_ESCAPE:
                 return (Event::ESCAPE);
             case 'a':
@@ -136,8 +140,8 @@ namespace Arcade {
         int color = object->getColor();
 
         attron(COLOR_PAIR(color));
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
                 mvprintw(y + j, x + i, " ");
             }
         }
@@ -151,8 +155,8 @@ namespace Arcade {
         int color = object->getColor();
 
         attron(COLOR_PAIR(color));
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
+        for (int i = 0; i < WIDTH; i++) {
+            for (int j = 0; j < HEIGHT; j++) {
                 mvprintw(y + j, x + i, " ");
             }
         }
@@ -195,9 +199,9 @@ namespace Arcade {
     int NCurses::playTurn()
     {
         float dif = clock() - _clock;
-        int result = dif / 1000000;
+        int result = dif / CLOCKS_PER_SEC;
 
-        if (result >= 1) {
+        if (result >= 0.1) {
             _clock = clock();
             return result;
         } 

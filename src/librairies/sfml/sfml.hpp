@@ -38,6 +38,7 @@ namespace Arcade {
             void drawCircle(const std::shared_ptr<Arcade::Object> object) override;
             void drawText(const std::shared_ptr<Arcade::Object> object) override;
             static sf::Color defineColor(Arcade::Color color);
+            std::map<std::string, sf::Texture> _textureMap;
             sf::RenderWindow _window;
             sf::Clock _clock;
     };
