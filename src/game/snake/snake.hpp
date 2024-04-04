@@ -31,11 +31,13 @@ namespace Arcade {
             void _do_movement(int direction);
             void _set_direction(int direction);
             bool _check_colide(int x, int y);
+            std::vector<std::shared_ptr<Arcade::Object>> _is_dead();
         private:
             int _score;
             std::vector<std::shared_ptr<Arcade::Object>> _game;
             int _direction;
             int _len;
+            bool _alive;
     };
 }
 extern "C" Arcade::IGame *entryPointGame();
