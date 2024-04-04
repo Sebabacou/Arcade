@@ -10,6 +10,15 @@
 #include "IGame.hpp"
 #include <map>
 
+#define FRUIT "librairies/assets/snake/fruit.png"
+#define GROUND ""
+#define WALL "librairies/assets/snake/wall.png"
+#define BODY "librairies/assets/snake/body.png"
+#define HEADUP "librairies/assets/snake/head_up.png"
+#define HEADDOWN "librairies/assets/snake/head_down.png"
+#define HEADLEFT "librairies/assets/snake/head_left.png"
+#define HEADRIGHT "librairies/assets/snake/head_right.png"
+
 #define MAP_X 21
 #define MAP_Y 21
 

@@ -52,16 +52,16 @@ void Arcade::snake::init()
     for (int i = 0; i < MAP_X; i++) {
         for (int j = 0; j < MAP_Y; j++) {
             if (i == 0 || i == MAP_X - 1 || j == 0 || j == MAP_Y - 1) {
-                std::shared_ptr<Arcade::Object> wall = std::make_shared<Arcade::Object>(Arcade::Object::Position(i, j), Arcade::Type::Rectangle, Arcade::Color::WHITE, "librairies/assets/snake/wall.jpg");
-                _game.push_back(wall);
+                _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(i, j), Arcade::Type::Rectangle, Arcade::Color::WHITE, WALL));
             } else {
-                _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(i, j), Arcade::Type::Rectangle, Arcade::Color::GREEN));
+                _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(i, j), Arcade::Type::Rectangle, Arcade::Color::GREEN, GROUND));
             }
         }
     }
     for (int i = 0; i < _len; i++)
-        _snake.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2 - i, MAP_Y / 2),Arcade::Type::Rectangle, Arcade::Color::RED));
-    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X - 3, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE));
+        _snake.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2 - i, MAP_Y / 2),Arcade::Type::Rectangle, Arcade::Color::RED, BODY));
+    _snake.front()->setAsset(HEADRIGHT);
+    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X - 3, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, 1), Arcade::Type::Text, Arcade::Color::WHITE, "Score: " + std::to_string(_score)));
 }
 
@@ -84,6 +84,20 @@ void Arcade::snake::_move_snake(int x, int y)
             oldY = tmpY;
         }
         _snake[0]->setPosition(_snake[0]->getPosition().getX() + x, _snake[0]->getPosition().getY() + y);
+        switch (_direction) {
+            case UP:
+                _snake[0]->setAsset(HEADUP);
+                break;
+            case DOWN:
+                _snake[0]->setAsset(HEADDOWN);
+                break;
+            case LEFT:
+                _snake[0]->setAsset(HEADLEFT);
+                break;
+            case RIGHT:
+                _snake[0]->setAsset(HEADRIGHT);
+                break;
+        }
     } else {
         _alive = false;
     }
@@ -149,10 +163,10 @@ bool Arcade::snake::_check_colide(int x, int y)
             if (object->getColor() == Arcade::Color::PURPLE) {
                 _score++;
                 _len++;
-                _snake.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(_snake[_len - 2]->getPosition().getX(), _snake[_len - 2]->getPosition().getY()), Arcade::Type::Rectangle, Arcade::Color::RED));
+                _snake.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(_snake[_len - 2]->getPosition().getX(), _snake[_len - 2]->getPosition().getY()), Arcade::Type::Rectangle, Arcade::Color::RED, BODY));
                 _spawn_fruit(object);
                 for (auto &i : _game) {
-                    if (i->getColor() == Arcade::Color::WHITE)
+                    if (i->getColor() == Arcade::Color::WHITE && i->getAsset().find("Score") != std::string::npos)
                         i->setAsset("Score: " + std::to_string(_score));
                 }
             }
@@ -188,6 +202,9 @@ std::vector<std::shared_ptr<Arcade::Object>> Arcade::snake::_return_all_objects(
 void Arcade::snake::_spawn_fruit(std::shared_ptr<Arcade::Object> object)
 {
     object->setPosition(rand() % (MAP_X - 1), rand() % (MAP_Y - 1));
+    for (auto &i : _snake)
+        if (i->getPosition().getX() == object->getPosition().getX() && i->getPosition().getY() == object->getPosition().getY())
+            _spawn_fruit(object);
     if (object->getPosition().getX() == 0)
         object->setPosition(1, object->getPosition().getY());
     if (object->getPosition().getY() == 0)
