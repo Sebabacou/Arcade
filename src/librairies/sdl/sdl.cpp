@@ -277,7 +277,7 @@ namespace Arcade {
     int Sdl::playTurn()
     {
         float dif = clock() - _clock;
-        int s = dif / 1000000;
+        int s = dif / CLOCKS_PER_SEC;
 
         if (s >= 0.4f) {
             _clock = 0;
