@@ -55,7 +55,7 @@ void Arcade::snake::init()
     }
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::RED));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X - 2, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE));
-    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(0, MAP_Y + 2), Arcade::Type::Text, Arcade::Color::WHITE, "Score: " + std::to_string(_score)));
+    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, 1), Arcade::Type::Text, Arcade::Color::WHITE, "Score: " + std::to_string(_score)));
 }
 
 int Arcade::snake::getScore()
@@ -69,9 +69,14 @@ void Arcade::snake::_move_snake(int x, int y)
         if (object->getColor() == Arcade::Color::RED) {
             int oldX = object->getPosition().getX();
             int oldY = object->getPosition().getY();
+
             if (_check_colide(oldX + x, oldY + y)) {
+                for (auto &i : _game) {
+                    if (i->getPosition().getX() == oldX + x && i->getPosition().getY() == oldY + y) {
+                        i->setPosition(oldX, oldY);
+                    }
+                }
                 object->setPosition(oldX + x, oldY + y);
-                _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(oldX, oldY), Arcade::Type::Rectangle,Arcade::Color::GREEN));
             }
         }
     }
@@ -139,17 +144,19 @@ bool Arcade::snake::_check_colide(int x, int y)
             if (object->getColor() == Arcade::Color::PURPLE) {
                 _score++;
                 object->setPosition(rand() % (MAP_X - 1), rand() % (MAP_Y - 1));
+                if (object->getPosition().getX() == 0)
+                    object->setPosition(1, object->getPosition().getY());
+                if (object->getPosition().getY() == 0)
+                    object->setPosition(object->getPosition().getX(), 1);
                 for (auto &i : _game) {
-                    if (i->getColor() == Arcade::Color::WHITE) {
+                    if (i->getColor() == Arcade::Color::WHITE)
                         i->setAsset("Score: " + std::to_string(_score));
-                    }
                 }
             }
         }
     }
     return true;
 }
-
 
 extern "C" Arcade::IGame *entryPointGame()
 {
