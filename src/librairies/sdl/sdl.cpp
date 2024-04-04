@@ -142,10 +142,10 @@ namespace Arcade {
         SDL_Rect rect;
         rect.x = object->getPosition().getX() * SIZE;
         rect.y = object->getPosition().getY() * SIZE;
-        rect.w = SIZE * SIZE;
-        rect.h = SIZE * SIZE;
+        rect.w = SIZE;
+        rect.h = SIZE;
 
-        if (object->getAsset().empty()) {
+        if (object->getAsset().empty()  && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             Colors color = object->getColor();
@@ -276,20 +276,14 @@ namespace Arcade {
 
     int Sdl::playTurn()
     {
-        Uint32 startTime = SDL_GetTicks();
-        Uint32 currentTime = SDL_GetTicks();
-        float s;
+        float dif = clock() - _clock;
+        int s = dif / CLOCKS_PER_SEC;
 
-        while (true) {
-            currentTime = SDL_GetTicks();
-            s = (currentTime - startTime) / 1000.0f;
-
-            if (s >= 0.3f) {
-                startTime = SDL_GetTicks();
-                return static_cast<int>(s / 0.3f);
-            }
-            return 0;
+        if (s >= 0.4f) {
+            _clock = 0;
+            return static_cast<int>(s / 0.4f);
         }
+        return 0;
     }
 }
 
