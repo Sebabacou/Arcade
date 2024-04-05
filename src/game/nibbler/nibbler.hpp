@@ -21,7 +21,7 @@
 
 #define MAP_X 21
 #define MAP_Y 21
-// 21 / 3 = 7
+
 #define UP 0
 #define DOWN 1
 #define LEFT 2
