@@ -184,6 +184,7 @@ std::vector<std::shared_ptr<Arcade::Object>> Arcade::snake::_is_dead()
     if (_alive == false) {
         _game.clear();
         _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, MAP_Y / 2), Arcade::Type::Text, Arcade::Color::RED, "You died"));
+        _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, 0), Arcade::Type::Text, Arcade::Color::WHITE, "Snake"));
         _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, MAP_Y / 2 + 1), Arcade::Type::Text, Arcade::Color::WHITE, "Score: " + std::to_string(_score)));
     }
     return _game;
