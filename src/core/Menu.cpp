@@ -62,8 +62,7 @@ namespace Arcade {
         this->displayGames(pos, objects);
         this->displayScore(pos, objects);
         objects.push_back(std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, "Username :")));
-        pos.setX(5);
-        pos.setY(20);
+        pos.setX(pos.getX() + 5);
         objects.push_back(std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, this->_username)));
         return objects;
     }
@@ -83,7 +82,7 @@ namespace Arcade {
                 pos.setX(pos.getX() + 5);
             }
         }
-        pos.setX(display->getPosition().getX());
+        pos.setX(1);
         pos.setY(pos.getY() + 3);
     }
 
@@ -92,7 +91,7 @@ namespace Arcade {
         std::shared_ptr<Object> game = std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, "Game :"));
 
         objects.push_back(game);
-        pos.setX(pos.getX() + 5);
+        pos.setX(pos.getX() + 4);
         for (auto gameLib : this->_games) {
             objects.push_back(std::make_shared<Object>(Object(pos, Arcade::Type::Text,
             gameLib == this->_gameInUse ? Arcade::Color::GREEN : Arcade::Color::WHITE, this->getLibName(gameLib))));
@@ -112,7 +111,7 @@ namespace Arcade {
         std::shared_ptr<Object> game = std::make_shared<Object>(Object(pos, Type::Text, Color::WHITE, "Best :"));
 
         objects.push_back(game);
-        pos.setX(pos.getX() + 5);
+        pos.setX(pos.getX() + 4);
         for (auto pair : this->_bestScore) {
             if (pair.first == this->_gameInUse) {
                 std::string userScore = std::get<0>(pair.second) + " - " + std::to_string(std::get<1>(pair.second));
@@ -120,15 +119,15 @@ namespace Arcade {
             }
         }
         pos.setX(1);
-        pos.setY(25);
+        pos.setY(pos.getY() + 3);
     }
 
     std::string Menu::getLibName(const std::string lib) const
     {
         std::string result = lib;
 
-        if (result.compare(0, 6, "./lib/") == 0)
-            result.replace(0, 6, "");
+        if (result.compare(0, 13, "./lib/arcade_") == 0)
+            result.replace(0, 13, "");
         if (result.compare(result.length() - 3, 3, ".so") == 0)
             result.replace(result.length() - 3, 3, "");
         return result;
