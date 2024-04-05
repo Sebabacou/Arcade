@@ -18,23 +18,22 @@ Arcade::nibbler::~nibbler()
 
 std::vector<std::shared_ptr<Arcade::Object>> Arcade::nibbler::Turn(Arcade::Event event)
 {
-    if (_fruit_nb == _score) {
+    if (_fruit_nb == 0)
         _lvl_finished = true;
-    }
     switch (event) {
         case Arcade::Event::GAME_LEFT:
             if (!_alive)
                 return _is_dead();
             if (_lvl_finished)
                 return _is_win();
-            _do_movement(LEFT);
+            _do_movement(LEFT, true);
             break;
         case Arcade::Event::GAME_RIGHT:
             if (!_alive)
                 return _is_dead();
             if (_lvl_finished)
                 return _is_win();
-            _do_movement(RIGHT);
+            _do_movement(RIGHT, true);
             break;
         case Arcade::Event::GAME_RESTART:
             init();
@@ -44,7 +43,7 @@ std::vector<std::shared_ptr<Arcade::Object>> Arcade::nibbler::Turn(Arcade::Event
                 return _is_dead();
             if (_lvl_finished)
                 return _is_win();
-            _do_movement(0);
+            _do_movement(0, true);
             break;
     }
     return _return_all_objects();
@@ -74,14 +73,14 @@ void Arcade::nibbler::init()
     _score = 0;
     _direction = RIGHT;
     _len = 4;
+    _fruit_nb = 0;
     _alive = true;
     _lvl_finished = false;
     _game.clear();
     _snake.clear();
-    for (int i = 0; i < MAP_X; i++) {
+    for (int i = 0; i < MAP_X; i++)
         for (int j = 0; j < MAP_Y; j++)
             _generate_map(i, j);
-    }
     for (int i = 0; i < _len; i++)
         _snake.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2 - i, MAP_Y - 2),Arcade::Type::Rectangle, Arcade::Color::RED, BODY));
     _snake.front()->setAsset(HEADRIGHT);
@@ -91,18 +90,20 @@ void Arcade::nibbler::init()
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X - 3, 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(2, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(2, MAP_Y - 3), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
+    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(2, 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
+
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2 - 4, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2 + 4, MAP_Y / 2), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2, MAP_Y / 2 - 4), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X / 2, MAP_Y / 2 + 4), Arcade::Type::Rectangle, Arcade::Color::PURPLE, FRUIT));
-    for (auto &object : _game) {
+
+    for (auto &object : _game)
         if (object->getColor() == Arcade::Color::PURPLE)
             _fruit_nb++;
-    }
 
     _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, 0), Arcade::Type::Text, Arcade::Color::WHITE, "Nibbler"));
-    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, 1), Arcade::Type::Text, Arcade::Color::WHITE, "Score: " + std::to_string(_score)));
+    _game.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(MAP_X + 1, 1), Arcade::Type::Text, Arcade::Color::WHITE, "Fruits: " + std::to_string(_fruit_nb)));
 }
 
 int Arcade::nibbler::getScore()
@@ -141,7 +142,27 @@ void Arcade::nibbler::_move_snake(int x, int y)
     } else if (collide == false) {
         _alive = false;
     } else {
-        _alive = false;
+        _direction = _prev_direction;
+        collide = true;
+        if (_direction == UP || _direction == DOWN) {
+            if (_check_colide(oldX - 1, oldY) != 2 && _check_colide(oldX + 1, oldY) == 2) {
+                collide = false;
+                _direction = LEFT;
+            } else if (_check_colide(oldX + 1, oldY) != 2 && _check_colide(oldX - 1, oldY) == 2) {
+                collide = false;
+                _direction = RIGHT;
+            }
+        } else if (_direction == LEFT || _direction == RIGHT) {
+            if (_check_colide(oldX, oldY - 1) != 2 && _check_colide(oldX, oldY + 1) == 2) {
+                collide = false;
+                _direction = UP;
+            } else if (_check_colide(oldX, oldY + 1) != 2 && _check_colide(oldX, oldY - 1) == 2) {
+                collide = false;
+                _direction = DOWN;
+            }
+        }
+        if (!collide)
+            _do_movement(0, false);
     }
 }
 
@@ -178,9 +199,10 @@ void Arcade::nibbler::_set_direction(int direction)
     }
 }
 
-void Arcade::nibbler::_do_movement(int direction)
+void Arcade::nibbler::_do_movement(int direction, bool set_direction)
 {
-    _set_direction(direction);
+    if (set_direction)
+        _set_direction(direction);
     switch (_direction) {
         case UP:
             _move_snake(0, -1);
@@ -206,13 +228,13 @@ int Arcade::nibbler::_check_colide(int x, int y)
             if (object->getColor() == Arcade::Color::PURPLE) {
                 _score++;
                 _len++;
+                _fruit_nb--;
                 _snake.push_back(std::make_shared<Arcade::Object>(Arcade::Object::Position(_snake[_len - 2]->getPosition().getX(), _snake[_len - 2]->getPosition().getY()), Arcade::Type::Rectangle, Arcade::Color::RED, BODY));
-                // remove the object
                 object->setAsset(GROUND);
                 object->setColor(Arcade::Color::GREEN);
                 for (auto &i : _game) {
-                    if (i->getColor() == Arcade::Color::WHITE && i->getAsset().find("Score") != std::string::npos)
-                        i->setAsset("Score: " + std::to_string(_score));
+                    if (i->getColor() == Arcade::Color::WHITE && i->getAsset().find("Fruits") != std::string::npos)
+                        i->setAsset("Fruits: " + std::to_string(_fruit_nb));
                 }
             }
         }

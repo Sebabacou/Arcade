@@ -38,7 +38,7 @@ namespace Arcade {
         private:
             void _generate_map(int i, int j);
             void _move_snake(int direction_x, int direction_y);
-            void _do_movement(int direction);
+            void _do_movement(int direction, bool set_direction);
             void _set_direction(int direction);
             int _check_colide(int x, int y);
             std::vector<std::shared_ptr<Arcade::Object>> _return_all_objects();
