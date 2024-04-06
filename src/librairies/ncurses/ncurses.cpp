@@ -54,6 +54,8 @@ namespace Arcade {
                 return (Event::GAME_RESTART);
             case KEY_F(6):
                 return (Event::MENU);
+            case KEY_BACKSPACE:
+                return (Event::BACKSPACE);
             case '\n':
                 return (Event::ENTER);
             case ' ':
