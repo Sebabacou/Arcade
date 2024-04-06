@@ -154,7 +154,7 @@ namespace Arcade {
             Colors color = object->getColor();
             SDL_SetRenderDrawColor(_renderer, color._r, color._g, color._b, color._a);
             SDL_RenderFillRect(_renderer, &rect);
-            SDL_RenderDrawRect(_renderer, &rect); 
+            SDL_RenderDrawRect(_renderer, &rect);
         }
     }
 
