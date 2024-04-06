@@ -22,6 +22,7 @@ namespace Arcade {
         this->_libInUse = obj._libInUse;
         this->_libs = obj._libs;
         this->_username = obj._username;
+        this->_bestScore = obj._bestScore;
     }
 
     Menu::~Menu()
@@ -287,9 +288,13 @@ namespace Arcade {
 
         if (fileContent.fail())
             return;
-        while (std::getline(fileContent, line)) {
-            if (std::regex_search(line, matches, pattern))
-                this->_bestScore[matches[1]] = std::make_tuple(matches[2], std::stoi(matches[3]));
+        try {
+            while (std::getline(fileContent, line)) {
+                if (std::regex_search(line, matches, pattern))
+                    this->_bestScore[matches[1]] = std::make_tuple(matches[2], std::stoi(matches[3]));
+            }
+        } catch (std::exception &e) {
+            throw Core::CoreError("Menu : score file has been corrupted.");
         }
     }
 
@@ -356,6 +361,7 @@ namespace Arcade {
         this->_libInUse = obj._libInUse;
         this->_libs = obj._libs;
         this->_username = obj._username;
+        this->_bestScore = obj._bestScore;
         return *this;
     }
 }

@@ -11,6 +11,11 @@ Arcade::ErrorHandler::ErrorHandler()
 {
 }
 
+Arcade::ErrorHandler::ErrorHandler(const ErrorHandler &obj)
+{
+    (void)obj;
+}
+
 Arcade::ErrorHandler::~ErrorHandler()
 {
 }
@@ -44,6 +49,13 @@ void Arcade::ErrorHandler::checkLibValidity(const char *pathToLib) const
             throw ErrorHandler::Error("ErrorHandler : This lib " + stringPath + " does not correspond \
             project architecture");
     } catch (std::exception &e) {
-        throw ErrorHandler::Error("ErrorHandler : Fail during openlib, probably non existant lib.");
+        throw;
     }
+}
+
+Arcade::ErrorHandler &Arcade::ErrorHandler::operator=(const ErrorHandler &obj)
+{
+    if (&obj == this)
+        return *this;
+    return *this;
 }
