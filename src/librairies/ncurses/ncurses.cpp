@@ -199,7 +199,7 @@ namespace Arcade {
     int NCurses::playTurn()
     {
         float dif = clock() - _clock;
-        int result = dif / CLOCKS_PER_SEC;
+        int result = dif / 500000;
 
         if (result >= 0.1) {
             _clock = clock();
