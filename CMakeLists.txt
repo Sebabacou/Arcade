@@ -31,8 +31,8 @@ add_executable(arcade
 
 TARGET_LINK_LIBRARIES(arcade dl)
 
-add_subdirectory(src/game/snake)
-add_subdirectory(src/game/nibbler)
+add_subdirectory(src/librairies/snake)
+add_subdirectory(src/librairies/nibbler)
 add_subdirectory(src/librairies/ncurses)
 add_subdirectory(src/librairies/sfml)
 add_subdirectory(src/librairies/sdl)
