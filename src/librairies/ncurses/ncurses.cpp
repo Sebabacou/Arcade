@@ -56,6 +56,8 @@ namespace Arcade {
                 return (Event::MENU);
             case '\n':
                 return (Event::ENTER);
+            case ' ':
+                return (Event::SPACE);
             case KEY_UP:
                 return (Event::GAME_UP);
             case KEY_DOWN:
@@ -199,7 +201,7 @@ namespace Arcade {
     int NCurses::playTurn()
     {
         float dif = clock() - _clock;
-        int result = dif / CLOCKS_PER_SEC;
+        int result = dif / 500000;
 
         if (result >= 0.1) {
             _clock = clock();

@@ -24,7 +24,7 @@ namespace Arcade {
             ~Core();
         public:
             void mainLoop();
-            void refreshLib();
+            void refreshLib() const;
             void manageInput(Event &userInput, std::vector<std::shared_ptr<Object>> objects);
         public:
             Arcade::Core &operator=(const Core &obj);
@@ -40,7 +40,7 @@ namespace Arcade {
             };
         public:
             template<typename T>
-            void switchNextLib(std::list<std::string> listToCheck, std::string &libInUse, std::unique_ptr<T> &objToChange)
+            void switchNextLib(std::list<std::string> listToCheck, std::string &libInUse, std::unique_ptr<T> &objToChange) const
             {
                 LibHandler libManager;
 
@@ -64,7 +64,7 @@ namespace Arcade {
             };
 
             template<typename T>
-            void switchPrevLib(std::list<std::string> listToCheck, std::string &libInUse, std::unique_ptr<T> &objToChange)
+            void switchPrevLib(std::list<std::string> listToCheck, std::string &libInUse, std::unique_ptr<T> &objToChange) const
             {
                 LibHandler libManager;
 
