@@ -49,6 +49,8 @@ namespace Arcade {
                         return (Event::MENU);
                     if (event.key.keysym.sym == SDLK_RETURN)
                         return (Event::ENTER);
+                    if (event.key.keysym.sym == SDLK_SPACE)
+                        return (Event::SPACE);
                     if (event.key.keysym.sym == SDLK_UP)
                         return (Event::GAME_UP);
                     if (event.key.keysym.sym == SDLK_DOWN)
@@ -145,7 +147,7 @@ namespace Arcade {
         rect.w = SIZE;
         rect.h = SIZE;
 
-        if (object->getAsset().empty()  && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
+        if (object->getAsset().empty() && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             Colors color = object->getColor();
@@ -277,14 +279,15 @@ namespace Arcade {
     int Sdl::playTurn()
     {
         float dif = clock() - _clock;
-        int s = dif / CLOCKS_PER_SEC;
+        int s = dif / 400000;
 
-        if (s >= 0.4f) {
-            _clock = 0;
-            return static_cast<int>(s / 0.4f);
+        if (s >= 0.6f) {
+            _clock = clock();
+            return static_cast<int>(s / 0.6f);
         }
         return 0;
     }
+
 }
 
 extern "C" Arcade::IDisplay *entryPointDisplay()

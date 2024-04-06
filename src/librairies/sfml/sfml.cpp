@@ -43,6 +43,8 @@ namespace Arcade {
                     return (Event::MENU);
                 case sf::Keyboard::Enter:
                     return (Event::ENTER);
+                case sf::Keyboard::Space:
+                    return (Event::SPACE);
                 case sf::Keyboard::Up:
                     return (Event::GAME_UP);
                 case sf::Keyboard::Down:
