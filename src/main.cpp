@@ -7,6 +7,7 @@
 
 #include <iostream>
 #include "ErrorHandler.hpp"
+#include "Core.hpp"
 
 int main(int ac, char **av)
 {
