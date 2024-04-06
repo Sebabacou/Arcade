@@ -145,7 +145,7 @@ namespace Arcade {
         rect.w = SIZE;
         rect.h = SIZE;
 
-        if (object->getAsset().empty()  && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
+        if (object->getAsset().empty() && IMG_LoadTexture(_renderer, object->getAsset().c_str()) != NULL) {
             SDL_RenderCopy(_renderer, _textures[object->getAsset()], NULL, &rect);
         } else {
             Colors color = object->getColor();
