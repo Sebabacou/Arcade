@@ -24,7 +24,7 @@ namespace Arcade {
             bool isGameLib(void *libOpened, bool closeLib = true) const;
             bool libIsChecked(const std::list<std::string> libList, const std::string lib) const;
             template<typename T>
-            T *libLoader(const std::string pathToLib) {
+            T *libLoader(const std::string pathToLib) const {
                 void *handler = this->openLib(pathToLib);
                 void *(*fptr)();
                 if (this->isDisplayLib(handler, false))

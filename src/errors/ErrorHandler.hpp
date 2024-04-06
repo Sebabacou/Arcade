@@ -15,11 +15,14 @@ namespace Arcade {
     class ErrorHandler {
         public:
             ErrorHandler();
+            ErrorHandler(const ErrorHandler &obj);
             ~ErrorHandler();
         public:
             void displayUsage() const;
             void checkArgumentsNumber(const int ac) const;
             void checkLibValidity(const char *pathToLib) const;
+        public:
+            ErrorHandler &operator=(const ErrorHandler &obj);
         public:
             class Error : public std::exception {
                 public:

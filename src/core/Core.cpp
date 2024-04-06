@@ -24,7 +24,8 @@ Arcade::Core::Core(std::string display)
 
 Arcade::Core::Core(const Arcade::Core &obj)
 {
-    (void)obj;
+    this->_isDisplayMenu = obj._isDisplayMenu;
+    this->_isPlaying = obj._isPlaying;
 }
 
 Arcade::Core::~Core()
@@ -98,7 +99,7 @@ void Arcade::Core::manageInput(Arcade::Event &userInput, std::vector<std::shared
         userInput = Event::NONE;
 }
 
-void Arcade::Core::refreshLib()
+void Arcade::Core::refreshLib() const
 {
     LibHandler libHandler;
 
@@ -107,6 +108,9 @@ void Arcade::Core::refreshLib()
 
 Arcade::Core &Arcade::Core::operator=(const Arcade::Core &obj)
 {
-    (void)obj;
+    if (&obj == this)
+        return *this;
+    this->_isDisplayMenu = obj._isDisplayMenu;
+    this->_isPlaying = obj._isPlaying;
     return *this;
 }

@@ -25,8 +25,8 @@ void *Arcade::LibHandler::openLib(const std::string libPath, const bool throwOnE
 {
     void *handle = dlopen(libPath.c_str(), RTLD_NOW | RTLD_NODELETE);
 
-    if (handle == NULL && throwOnError)
-        throw LibHandler::LibHandlerError("Core : Fail to open lib [" + libPath + "].");
+    if (handle == nullptr && throwOnError)
+        throw LibHandler::LibHandlerError(dlerror());
     return handle;
 }
 
@@ -43,7 +43,7 @@ bool Arcade::LibHandler::isDisplayLib(void *libOpened, bool closeLib) const
     if (!libOpened)
         return result;
     fptr = (void*(*)())dlsym(libOpened, "entryPointDisplay");
-    if (fptr != NULL)
+    if (fptr != nullptr)
         result = true;
     if (closeLib)
         this->closeLib(libOpened);
@@ -58,7 +58,7 @@ bool Arcade::LibHandler::isGameLib(void *libOpened, bool closeLib) const
     if (!libOpened)
         return result;
     fptr = (void*(*)())dlsym(libOpened, "entryPointGame");
-    if (fptr != NULL)
+    if (fptr != nullptr)
         result = true;
     if (closeLib)
         this->closeLib(libOpened);
